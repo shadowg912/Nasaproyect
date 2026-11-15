@@ -1,4 +1,4 @@
-import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, primaryKey, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 export const provinces = sqliteTable("provinces", {
   id: integer("id").primaryKey(),
@@ -72,8 +72,14 @@ export const fireDetections = sqliteTable(
     ingestionRunId: integer("ingestion_run_id").references(() => ingestionRuns.id),
     firstSeenAt: text("first_seen_at").notNull(),
     updatedAt: text("updated_at").notNull(),
+    /** País ISO 3166-1 alfa-3 (los datos anteriores a la armonización son todos de RD). */
+    countryIso3: text("country_iso3").notNull().default("DOM"),
+    /** Columna `type` de FIRMS: 0 vegetación, 1 volcán, 2 fuente fija, 3 costa afuera; null en NRT. */
+    fireType: integer("fire_type"),
+    sensorFamily: text("sensor_family", { enum: ["MODIS", "VIIRS"] }),
   },
   (t) => [
+    index("fire_country_date_idx").on(t.countryIso3, t.acqDate),
     index("fire_acq_date_idx").on(t.acqDate),
     index("fire_source_date_idx").on(t.source, t.acqDate),
     index("fire_satellite_date_idx").on(t.satellite, t.acqDate),
@@ -108,3 +114,66 @@ export const syncLock = sqliteTable("sync_lock", {
   expiresAt: text("expires_at").notNull(),
 });
 
+
+/* ───────────── Historial por país y armonización MODIS + VIIRS ───────────── */
+
+export const countries = sqliteTable("countries", {
+  iso3: text("iso3").primaryKey(),
+  nameEs: text("name_es").notNull(),
+  /** Nombre usado en las URL de archivos por país de FIRMS (p. ej. `Dominican_Republic`). */
+  firmsName: text("firms_name").notNull(),
+  bboxJson: text("bbox_json").notNull(),
+  mode: text("mode", { enum: ["full", "aggregate"] }),
+});
+
+/** Estado de descarga por país, producto y año (permite reanudar). */
+export const countryLoads = sqliteTable(
+  "country_loads",
+  {
+    iso3: text("iso3").notNull(),
+    product: text("product").notNull(),
+    year: integer("year").notNull(),
+    state: text("state", { enum: ["pending", "running", "done", "missing", "error"] }).notNull(),
+    rows: integer("rows").notNull().default(0),
+    error: text("error"),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.iso3, t.product, t.year] })],
+);
+
+/** Serie mensual derivada. `region_key`: `ISO3`, `ISO3:p:<id>` o `ISO3:m:<id>`; `*_cd` = celdas-día. */
+export const harmonizedMonthly = sqliteTable(
+  "harmonized_monthly",
+  {
+    regionKey: text("region_key").notNull(),
+    year: integer("year").notNull(),
+    month: integer("month").notNull(),
+    modisRaw: integer("modis_raw").notNull().default(0),
+    viirsRaw: integer("viirs_raw").notNull().default(0),
+    modisCd: integer("modis_cd").notNull().default(0),
+    viirsCd: integer("viirs_cd").notNull().default(0),
+    harmonized: real("harmonized"),
+    singleSatellite: integer("single_satellite", { mode: "boolean" }).notNull().default(false),
+  },
+  (t) => [primaryKey({ columns: [t.regionKey, t.year, t.month] })],
+);
+
+export const calibrations = sqliteTable("calibration", {
+  regionKey: text("region_key").primaryKey(),
+  k: real("k").notNull(),
+  ciLo: real("ci_lo").notNull(),
+  ciHi: real("ci_hi").notNull(),
+  r2: real("r2").notNull(),
+  kTerra: real("k_terra").notNull(),
+  overlapFrom: integer("overlap_from").notNull(),
+  overlapTo: integer("overlap_to").notNull(),
+  source: text("source", { enum: ["region", "country"] }).notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+/** Caché de respuestas externas de la NASA (GIBS, POWER). */
+export const contextCache = sqliteTable("context_cache", {
+  key: text("key").primaryKey(),
+  body: text("body").notNull(),
+  fetchedAt: text("fetched_at").notNull(),
+});
