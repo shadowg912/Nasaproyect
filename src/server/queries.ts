@@ -15,7 +15,7 @@ export const PLATFORMS: Record<string, string> = {
  * está cubierto por el producto estándar (SP), se excluyen las filas NRT de ese
  * día para no contar dos veces el mismo fuego.
  */
-const DEDUPE = `NOT (d.source LIKE '%\\_NRT' ESCAPE '\\' AND EXISTS (
+export const DEDUPE = `NOT (d.source LIKE '%\\_NRT' ESCAPE '\\' AND EXISTS (
   SELECT 1 FROM ingestion_coverage c WHERE c.source = replace(d.source, '_NRT', '_SP')
   AND d.acq_date BETWEEN c.date_from AND c.date_to))`;
 

@@ -152,6 +152,8 @@ export const harmonizedMonthly = sqliteTable(
     viirsRaw: integer("viirs_raw").notNull().default(0),
     modisCd: integer("modis_cd").notNull().default(0),
     viirsCd: integer("viirs_cd").notNull().default(0),
+    terraCd: integer("terra_cd").notNull().default(0),
+    noaa20Cd: integer("noaa20_cd").notNull().default(0),
     harmonized: real("harmonized"),
     singleSatellite: integer("single_satellite", { mode: "boolean" }).notNull().default(false),
   },
