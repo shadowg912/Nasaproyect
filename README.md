@@ -48,6 +48,7 @@ Límite de NASA: 5000 transacciones cada 10 minutos por clave.
 | `SYNC_INTERVAL_MINUTES` | `30` | Intervalo de `sync:watch`. |
 | `SYNC_FRESH_HOURS` | `6` | Antigüedad máxima para considerar los datos «actualizados». |
 | `FIRMS_TIMEOUT_MS` | `30000` | Tiempo de espera por solicitud a NASA. |
+| `ANTHROPIC_API_KEY` | *(vacía)* | Clave del chat IA (opcional). Vacía: el chat muestra «disponible cuando se configure la clave» y nada más cambia. Es de pago por uso (platform.claude.com), distinta de una suscripción Pro. |
 
 ## Comandos
 
