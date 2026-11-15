@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import Database from "better-sqlite3";
 import { E2E_DB } from "../../playwright.config";
+import { readFileSync } from "node:fs";
+const calendar = JSON.parse(readFileSync("tests/fixtures/api/calendar-dom.json", "utf8"));
 
 const isLocal = (url: string) => {
   const u = new URL(url);
@@ -12,6 +14,8 @@ async function trackExternal(page: Page) {
   const external: string[] = [];
   await page.context().route("**/*", (route) => {
     const url = route.request().url();
+    // Contrato de calendario provisional mientras la Parte 1 publica la ruta.
+    if (new URL(url).pathname === "/api/calendar") return route.fulfill({ json: calendar });
     if (isLocal(url)) return route.continue();
     external.push(url);
     return route.abort();
@@ -32,7 +36,7 @@ test("la interfaz carga sin solicitudes externas y con NASA inaccesible", async 
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
-  for (const [path, heading] of [["/", "Detecciones"], ["/historico", "Análisis histórico"], ["/aprende", "¿Cómo se detectan"], ["/estado", "Estado de los datos"]]) {
+  for (const [path, heading] of [["/", "Entender el fuego"], ["/rd", "Detecciones"], ["/historico", "Análisis histórico"], ["/aprende", "¿Cómo se detectan"], ["/estado", "Estado de los datos"]]) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
     await expect(page.getByText(heading).first()).toBeVisible();
@@ -43,7 +47,7 @@ test("la interfaz carga sin solicitudes externas y con NASA inaccesible", async 
 
 test("el mapa se renderiza sin conexión con capas locales", async ({ page }) => {
   const external = await trackExternal(page);
-  await page.goto("/");
+  await page.goto("/rd");
   await expect(page.getByTestId("map")).toHaveAttribute("data-ready", "true", { timeout: 20_000 });
   await expect(page.locator(".maplibregl-canvas")).toBeVisible();
   const box = await page.getByTestId("map").boundingBox();
@@ -58,7 +62,7 @@ test("el mapa se renderiza sin conexión con capas locales", async ({ page }) =>
 
 test("los indicadores y gráficos coinciden con SQLite y los filtros funcionan sin conexión", async ({ page }) => {
   const external = await trackExternal(page);
-  await page.goto("/");
+  await page.goto("/rd");
   await expect(page.getByTestId("kpi-total")).toHaveText(String(dbCount()));
   await page.getByTestId("conf-high").click();
   await expect(page).toHaveURL(/confidence=high/);
@@ -80,7 +84,7 @@ test("un fallo de NASA no borra datos y se muestra como 'Sin conexión con NASA'
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-state", "offline", { timeout: 10_000 });
   expect(dbCount()).toBe(before);
   // El panel sigue mostrando los datos locales
-  await page.goto("/");
+  await page.goto("/rd");
   await expect(page.getByTestId("kpi-total")).toHaveText(String(before));
 });
 

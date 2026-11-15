@@ -45,6 +45,7 @@ export default function FireMap({ fires, provinceCounts, selectedProvince, onSel
     }
     const origin = window.location.origin;
     const map = new maplibregl.Map({
+      locale: { "NavigationControl.ZoomIn": "Acercar", "NavigationControl.ZoomOut": "Alejar", "NavigationControl.ResetBearing": "Orientar al norte", "AttributionControl.ToggleAttribution": "Mostrar atribuciones", "Map.Title": "Mapa de focos de calor" },
       container: container.current,
       style: basemap === "pmtiles" ? pmtilesStyle(origin) : geojsonStyle(origin),
       bounds: RD_BOUNDS,

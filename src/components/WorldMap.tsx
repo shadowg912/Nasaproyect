@@ -12,7 +12,7 @@ export default function WorldMap({ onCountry, onArea, aoi }: { onCountry: (iso3:
   useEffect(()=>{
     if(!el.current)return;
     ml.setWorkerUrl(`${location.origin}/vendor/maplibre-gl-worker.mjs`);
-    const map=new ml.Map({container:el.current,center:[-35,20],zoom:1.4,style:{version:8,sources:{},layers:[{id:'ocean',type:'background',paint:{'background-color':'#e4edf0'}}]}});
+    const map=new ml.Map({container:el.current,locale:{"NavigationControl.ZoomIn":"Acercar","NavigationControl.ZoomOut":"Alejar","NavigationControl.ResetBearing":"Orientar al norte","AttributionControl.ToggleAttribution":"Mostrar atribuciones","Map.Title":"Mapa mundial"},center:[-35,20],zoom:1.4,style:{version:8,sources:{},layers:[{id:'ocean',type:'background',paint:{'background-color':'#e4edf0'}}]}});
     mapRef.current=map;
     map.addControl(new ml.NavigationControl(),'top-right');
     const ctrl=new AbortController();
