@@ -59,6 +59,7 @@ Límite de NASA: 5000 transacciones cada 10 minutos por clave.
 | `npm run sync:firms` | Sincronización manual (API de área si hay clave; si no, feed público). Opciones: `-- --public`, `-- --days 5`, `-- --sources A,B`. |
 | `npm run sync:watch` | Proceso local de sincronización periódica. |
 | `npm run import:history -- --from AAAA-MM-DD --to AAAA-MM-DD` | Importa historial en lotes de 5 días (requiere clave). Opciones: `--sources`, `--force`, `--delay ms`, `--dry-run`. |
+| `npm run history:country -- DOM [--local data/raw/firms-country] [--area data/raw/firms-area/2026]` | Importa el historial MODIS (2000→) y VIIRS Suomi NPP (2012→) de un país desde los archivos anuales de FIRMS (sin clave) y reconstruye su serie armonizada. Reanudable. `--rebuild-only` solo recalcula. |
 | `npm run geo:prepare` | Vuelve a descargar los límites administrativos (herramienta de desarrollo; los resultados ya están versionados). |
 | `npm run maps:prepare` | Genera el mapa base PMTiles local (opcional, ver abajo). |
 | `npm test` | Pruebas unitarias e integración (Vitest). |

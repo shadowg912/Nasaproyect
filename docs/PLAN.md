@@ -28,3 +28,11 @@ Fuente de requisitos: `docs/PROJECT_SPEC.md`.
 7. **Interfaz** — dashboard, mapa MapLibre, filtros, gráficos, histórico, educación, indicador de estado.
 8. **Mapa PMTiles** — `maps:prepare` (extract de Protomaps + glyphs/sprites locales).
 9. **E2E** — Playwright: sin solicitudes externas, NASA inaccesible, persistencia tras reinicio.
+
+## Fase 2 — Armonización MODIS + VIIRS (NASA Space Apps 2026)
+
+- Diseño aprobado: `docs/superpowers/specs/2026-11-14-fuego-rd-armonizacion-design.md`.
+- Plan de la Parte 1 (datos, armonización y API): `docs/superpowers/plans/2026-11-15-parte1-datos-armonizacion-api.md`.
+- La regla de la fila 4 se amplía: FIRMS sigue siendo la fuente de focos, y en ejecución se permiten además GIBS (imágenes) y
+  POWER (clima) de la NASA, con caché local; la API de Anthropic solo para el chat IA.
+- Telemetría (fila 7): `NEXT_TELEMETRY_DISABLED=1` lo fija ahora `scripts/next.mjs`, portable a Windows.

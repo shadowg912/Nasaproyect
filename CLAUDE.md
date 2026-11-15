@@ -6,8 +6,12 @@ decisiones y contradicciones resueltas: `docs/PLAN.md`; uso: `README.md`.
 ## Reglas de arquitectura (no negociables)
 
 - Next.js (App Router) + TypeScript. SQLite vía better-sqlite3 + Drizzle ORM. MapLibre con recursos locales.
-- **NASA FIRMS es la única API externa en ejecución.** Nada de Supabase, Firebase, bases administradas, Mapbox/MapTiler/
-  Google Maps, teselas OSM remotas, CDNs, Google Fonts, analítica ni telemetría.
+- **Solo fuentes de la NASA en ejecución:** FIRMS (focos), GIBS (imágenes del día) y POWER (clima), siempre desde el
+  servidor y con caché local (`context_cache`). Única excepción: la API de Anthropic para el chat IA (`ANTHROPIC_API_KEY`;
+  vacía = chat desactivado). Nada de Supabase, Firebase, bases administradas, Mapbox/MapTiler/Google Maps, teselas OSM
+  remotas, CDNs, Google Fonts, analítica ni telemetría.
+- Armonización MODIS + VIIRS (reto Space Apps 2026): diseño en `docs/superpowers/specs/2026-11-14-fuego-rd-armonizacion-design.md`,
+  motor en `src/server/harmonize/`, historial por país en `src/server/history/`. Contrato de API: `src/lib/types.ts`.
 - SQLite solo en el servidor. Toda ruta o página que lo toque declara `export const runtime = "nodejs"`. Nunca Edge.
 - Los estilos de mapa no contienen URLs remotas. GeoJSON en `public/geo/`, PMTiles/fuentes/sprites en `public/maps/`.
 - La sincronización nunca borra datos; los errores se registran en `ingestion_runs`. Ausencia de detecciones ≠ fallo.

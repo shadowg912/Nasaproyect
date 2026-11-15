@@ -25,6 +25,15 @@
       "year": "2020",
       "updated": "Thu Jan 19 07:31:04 2023",
       "url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/DOM/ADM2/geoBoundaries-DOM-ADM2.geojson"
+    },
+    {
+      "level": "WORLD",
+      "file": "world.geojson",
+      "source": "Natural Earth 1:110m admin-0 countries (v5)",
+      "license": "Public Domain",
+      "year": "2026",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson",
+      "notes": "Propiedades reducidas a iso3, nombre en español y nombre FIRMS (NAME_LONG con _). Coordenadas a 3 decimales."
     }
   ]
 }
