@@ -3,7 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Panel" },
+  { href: "/", label: "Inicio" },
+  { href: "/global", label: "Mundo" },
+  { href: "/rd", label: "República Dominicana" },
+  { href: "/metodologia", label: "Metodología" },
   { href: "/historico", label: "Histórico" },
   { href: "/aprende", label: "Aprende" },
   { href: "/estado", label: "Estado" },
@@ -14,7 +17,7 @@ export function NavLinks() {
   return (
     <nav className="order-3 flex w-full gap-1 overflow-x-auto text-sm sm:order-none sm:w-auto" aria-label="Principal">
       {LINKS.map((l) => (
-        <Link key={l.href} href={l.href} className={`rounded-lg px-3 py-1.5 ${path === l.href ? "bg-fuego-100 font-semibold text-fuego-700" : "text-stone-600 hover:bg-stone-100"}`}>
+        <Link key={l.href} href={l.href} aria-current={path === l.href ? "page" : undefined} className={`rounded-lg px-3 py-1.5 ${path === l.href ? "bg-fuego-100 font-semibold text-fuego-700" : "text-stone-600 hover:bg-stone-100"}`}>
           {l.label}
         </Link>
       ))}

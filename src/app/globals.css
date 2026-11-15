@@ -4,7 +4,7 @@
   --color-fuego-50: #fff7ed;
   --color-fuego-100: #ffedd5;
   --color-fuego-500: #f97316;
-  --color-fuego-600: #ea580c;
+  --color-fuego-600: #b54421;
   --color-fuego-700: #c2410c;
   --color-tierra-900: #1f1a14;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
@@ -27,3 +27,51 @@ body { @apply bg-stone-50 text-stone-900 antialiased; }
 .prose-es ul { @apply list-disc space-y-1 pl-6; }
 
 .maplibregl-popup-content { @apply rounded-lg! p-3! shadow-lg!; }
+
+body { background: #f5f3eb; }
+:where(a,button,input,select,textarea):focus-visible { outline: 3px solid #036b87; outline-offset: 4px; }
+button, .btn, select { min-height: 32px; }
+.eyebrow { color: #526156; text-transform: uppercase; font-size: .75rem; font-weight: 700; letter-spacing: .15em; margin-bottom: .75rem; }
+.atlas-hero { padding: clamp(1.5rem, 5vw, 4rem) 0; border-bottom: 1px solid #cdd4d7; }
+.atlas-hero h1 { font-size: clamp(2.3rem, 5vw, 4rem); font-weight: 650; line-height: 1.1; letter-spacing: -.045em; margin-bottom: 1.5rem; color: #182d37; }
+.atlas-hero em { color: #9b3b1b; }
+.atlas-choice { display: block; padding: 2rem; border: 1px solid #bec8bb; background: #fffdf6; border-radius: .5rem; transition: transform .2s; }
+.atlas-choice:hover { transform: translateY(-3px); }
+.atlas-choice h2 { font-size: 1.7rem; font-weight: 650; margin: 1rem 0; color: #182d37; }
+.atlas-choice-rd { border-top: 4px solid #a5451d; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; z-index: 100; background: white; padding: 1rem; }
+.skip-link:focus { top: 1rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Consola cartográfica: datos primero, superficies sobrias y controles legibles. */
+body { background: #f4f6f7; color: #172b36; }
+header { border-bottom: 1px solid #cdd6da; }
+.brand-mark { display: grid; place-items: center; width: 30px; height: 30px; color: white; background: #b54421; font-weight: 800; }
+.card { border-radius: 5px; border-color: #d0d8dc; box-shadow: none; }
+.card-title { color: #425662; letter-spacing: .04em; }
+.input, .btn, .chip { border-radius: 4px; }
+.btn { min-height: 36px; }
+.atlas-choice { background: white; border-color: #cdd6da; border-radius: 5px; }
+.eyebrow { color: #49616d; }
+.page-heading { padding: 1rem 0; }
+.page-heading h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 650; letter-spacing: -.03em; }
+.page-heading p { max-width: 65ch; }
+.notice { background: #fff6df; border-left: 3px solid #956221; padding: .7rem; color: #62400f; font-size: .875rem; }
+.calendar-table { width: 100%; min-width: 640px; border-collapse: separate; border-spacing: 3px; font-size: .75rem; }
+.calendar-table th { text-align: center; color: #405563; font-weight: 600; }
+.calendar-table td { padding: 0; }
+.calendar-cell { width: 100%; min-height: 28px; display: block; border-radius: 2px; position: relative; }
+.single-satellite { background-image: repeating-linear-gradient(135deg, transparent, transparent 4px, #0003 4px, #0003 6px); }
+.cell-number { opacity: 0; display: block; color: #152a35; background: #fff; border: 1px solid #6a7880; border-radius: 2px; font-weight: 650; }
+.calendar-cell:hover .cell-number, .calendar-cell:focus-visible .cell-number { opacity: 1; }
+.calendar-cell:focus-visible { z-index: 1; }
+.chat-shell { position: fixed; right: 1rem; bottom: 1rem; z-index: 30; max-width: calc(100vw - 2rem); }
+.chat-toggle { display: block; margin-left: auto; background: #203a49; color: white; border-color: #203a49; }
+.chat-toggle:hover { background: #315364; }
+.chat-panel { width: 360px; max-width: calc(100vw - 2rem); background: white; padding: 1rem; border: 1px solid #bdcbd2; box-shadow: 0 8px 30px #152d3526; margin-top: .5rem; max-height: 75vh; overflow: auto; }
+.detail-dialog { margin: auto; width: min(620px, calc(100vw - 2rem)); max-height: 90vh; overflow: auto; border: 1px solid #aebec7; border-radius: 5px; padding: 1.25rem; }
+.detail-dialog::backdrop { background: #152b3599; }
+footer { padding-top: 1.5rem; padding-bottom: 5rem !important; line-height: 1.7; }
+summary { min-height: 32px; }
+.text-stone-400 { color: #5f6d74; }
+.text-stone-500 { color: #53616b; }
