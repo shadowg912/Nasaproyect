@@ -1,74 +1,46 @@
 export const metadata = { title: "Aprende — Fuego RD" };
 
-export default function Page() {
+const concepts = [
+  ["Foco de calor", "Un píxel que el satélite ve más caliente que su entorno. No equivale necesariamente a un incendio."],
+  ["FRP", "La potencia radiativa emitida al momento de la observación, expresada en megavatios. No mide superficie quemada."],
+  ["Anomalía", "Una comparación con lo habitual para ese mes: un valor mayor que uno indica más actividad que la mediana histórica."],
+];
+
+export default function LearnPage() {
   return (
-    <article className="prose-es mx-auto max-w-3xl">
-      <p className="eyebrow">Guía de lectura</p>
-      <h1 className="text-3xl font-bold">¿Cómo se detectan los incendios desde el espacio?</h1>
-      <dl className="card mt-5 space-y-3">
-        <div id="foco"><dt className="font-semibold">Foco de calor</dt><dd>Un punto que el satélite ve más caliente que su entorno. No equivale necesariamente a un incendio.</dd></div>
-        <div id="frp"><dt className="font-semibold">FRP</dt><dd>Energía emitida en el momento de la observación, expresada como potencia en megavatios. No mide la superficie quemada.</dd></div>
-        <div id="anomalia"><dt className="font-semibold">Anomalía</dt><dd>Comparación con lo habitual para ese mes: un valor mayor que uno indica más actividad que la mediana histórica.</dd></div>
+    <article className="mx-auto max-w-5xl space-y-5 rounded-[var(--radius-lg)] bg-[var(--color-brand-50)] p-4 sm:p-7">
+      <header className="max-w-3xl">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-brand-700)]">Guía de lectura</p>
+        <h1 className="text-3xl font-black tracking-tight text-[var(--color-brand-900)]">¿Cómo se detectan los incendios desde el espacio?</h1>
+        <p className="mt-3 text-lg leading-relaxed text-[var(--color-text)]">Los satélites observan anomalías térmicas. Esta guía ayuda a interpretarlas sin confundir una señal con una confirmación.</p>
+      </header>
+
+      <dl className="grid gap-4 md:grid-cols-3">
+        {concepts.map(([term, definition]) => <div key={term} className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]"><dt className="text-lg font-bold text-[var(--color-brand-900)]">{term}</dt><dd className="mt-3 leading-relaxed text-[var(--color-text)]">{definition}</dd></div>)}
       </dl>
-      <details className="mt-5"><summary className="cursor-pointer font-semibold">Más sobre satélites, confianza y limitaciones</summary>
-      <p className="mt-3">
-        Esta aplicación muestra <b>anomalías térmicas</b> detectadas por satélites de órbita polar y publicadas por el sistema
-        <b> FIRMS</b> (Fire Information for Resource Management System) de la NASA. Cada punto del mapa es un píxel donde el
-        sensor registró una temperatura mucho mayor que la de su entorno, lo que normalmente indica fuego activo.
-      </p>
 
-      <h2>Los satélites y el sensor VIIRS</h2>
-      <p>
-        Usamos datos del instrumento <b>VIIRS</b> (Visible Infrared Imaging Radiometer Suite) a bordo de tres satélites:
-        <b> Suomi NPP</b>, <b>NOAA-20</b> y <b>NOAA-21</b>. Cada uno pasa sobre República Dominicana aproximadamente dos veces al
-        día (alrededor de la 1:30 p. m. y la 1:30 a. m., hora local), por lo que un mismo incendio puede aparecer varias veces.
-      </p>
-      <ul>
-        <li>Resolución: cada píxel VIIRS cubre unos <b>375 × 375 metros</b>. El punto marca el centro del píxel, no la ubicación exacta del fuego.</li>
-        <li>Un píxel puede contener uno o varios focos; un incendio grande genera muchos puntos contiguos.</li>
-        <li>Las nubes densas, el humo espeso o el dosel del bosque pueden ocultar incendios.</li>
-      </ul>
+      <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+        <h2 className="text-xl font-bold text-[var(--color-brand-900)]">Satélites, confianza y límites</h2>
+        <div className="mt-4 grid gap-6 lg:grid-cols-2">
+          <div className="space-y-3 leading-relaxed text-[var(--color-text)]">
+            <p>La aplicación usa anomalías térmicas de <b>VIIRS</b> a bordo de Suomi NPP, NOAA-20 y NOAA-21, publicadas por NASA FIRMS. Cada punto representa el centro de un píxel, no la ubicación exacta del fuego.</p>
+            <p>Un píxel VIIRS cubre aproximadamente 375 × 375 metros. Un incendio grande puede generar puntos contiguos y un mismo foco puede aparecer en más de un paso satelital.</p>
+            <p>Las detecciones nocturnas tienen menos interferencia solar; las diurnas pueden incluir más señales de baja confianza.</p>
+          </div>
+          <ul className="space-y-3 rounded-[var(--radius-sm)] bg-[var(--color-brand-50)] p-4 text-[var(--color-text)]">
+            <li><b>Alta:</b> señal térmica muy fuerte.</li>
+            <li><b>Nominal:</b> detección clara con contraste moderado.</li>
+            <li><b>Baja:</b> señal débil o afectada por reflejos, superficies calientes o nubes.</li>
+            <li><b>Nubes y humo:</b> pueden ocultar fuegos; la ausencia de puntos no garantiza que no haya incendio.</li>
+          </ul>
+        </div>
+      </section>
 
-      <h2>¿Qué significa cada dato?</h2>
-      <h3>Nivel de confianza</h3>
-      <ul>
-        <li><b>Alta:</b> la señal térmica es muy fuerte; casi seguro es fuego.</li>
-        <li><b>Nominal:</b> detección clara con un contraste térmico moderado.</li>
-        <li><b>Baja:</b> señal débil o afectada por reflejos solares, superficies calientes o bordes de nubes. Puede ser un falso positivo.</li>
-      </ul>
-      <h3>FRP — Potencia radiativa del fuego</h3>
-      <p>
-        Se mide en <b>megavatios (MW)</b> y estima la energía que emite el fuego en el momento de la observación. Valores más
-        altos suelen corresponder a incendios más intensos o extensos.
-      </p>
-      <h3>Día y noche</h3>
-      <p>Las detecciones nocturnas tienen menos interferencia solar; las diurnas pueden incluir más falsos positivos de baja confianza.</p>
-
-      <h2>Tiempo casi real e histórico</h2>
-      <p>
-        Los productos <b>NRT</b> (Near Real-Time) se publican en pocas horas, pero solo están disponibles para los meses recientes.
-        Para el historial se usan los productos de <b>procesamiento estándar (SP)</b>, más precisos y publicados con retraso.
-        La aplicación evita contar dos veces el mismo día cuando ambos productos están descargados.
-      </p>
-
-      <h2>Limitaciones importantes</h2>
-      <ul>
-        <li>No todas las detecciones son incendios forestales: también aparecen quemas agrícolas, vertederos e industrias.</li>
-        <li>La ausencia de puntos no garantiza que no haya fuego (nubes, horario del paso del satélite, fuegos pequeños).</li>
-        <li>Las horas se registran en UTC por NASA; la interfaz las muestra en hora de República Dominicana (UTC−4).</li>
-        <li>Los límites de provincias y municipios provienen de fuentes abiertas y pueden diferir ligeramente de los oficiales.</li>
-      </ul>
-
-      <h2>Incendios y temporada seca en RD</h2>
-      <p>
-        La mayor actividad suele concentrarse en la temporada seca (aproximadamente de enero a abril), especialmente en zonas de
-        montaña como la Cordillera Central y la Sierra de Bahoruco, y en áreas agrícolas donde se practica la quema.
-      </p>
-
-      </details>
-      <p className="mt-6 text-sm text-stone-500">
-        Fuente científica: NASA FIRMS — LANCE / EOSDIS. Esta herramienta es informativa y no reemplaza los canales oficiales.
-      </p>
+      <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+        <h2 className="text-xl font-bold text-[var(--color-brand-900)]">Tiempo casi real e histórico</h2>
+        <p className="mt-3 leading-relaxed text-[var(--color-text)]">Los productos NRT se publican en pocas horas, pero cubren meses recientes. Para el historial se usan productos de procesamiento estándar, publicados con retraso. El calendario armonizado ayuda a comparar periodos en los que MODIS y VIIRS observaron con capacidades distintas.</p>
+        <p className="mt-4 text-sm text-[var(--color-text)]/75">Las horas se almacenan en UTC y la interfaz las presenta en America/Santo_Domingo. Fuente científica: NASA FIRMS — LANCE / EOSDIS.</p>
+      </section>
     </article>
   );
 }

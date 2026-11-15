@@ -145,6 +145,20 @@ Detalle en `public/geo/sources.json`. Limitaciones: ADM1 y ADM2 provienen de fue
 exactamente; RD tiene oficialmente 158 municipios y la fuente abierta 155. Natural Earth usa algunos nombres antiguos,
 que se corrigen (`Hermanas` → Hermanas Mirabal, `La Estrelleta` → Elías Piña).
 
+### Fuentes y licencias
+
+| Fuente | Uso | Condiciones y referencia |
+|---|---|---|
+| [NASA GIBS](https://gibs.earthdata.nasa.gov) | Imágenes, fondos y overlays | Uso libre con cita a NASA. |
+| NASA FIRMS | Focos de calor | Uso libre con cita a NASA FIRMS. |
+| NASA Visible Earth | Textura Blue Marble | Dominio público. |
+| NASA POWER | Contexto meteorológico | Uso libre con cita a NASA. |
+| Esri | Fondos opcionales: [Streets y Topographic](https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer), [Light/Dark Gray](https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer) y [Firefly](https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer) | Términos de Esri, atribución visible y sin caché. |
+| UNEP-WCMC WDPA | Áreas protegidas | Uso no comercial con atribución, según los términos de Protected Planet. |
+| Smithsonian GVP | Volcanes holocenos | Uso con cita. |
+| Natural Earth | Límites mundiales | Dominio público. |
+| geoBoundaries | Límites administrativos | CC BY 4.0. |
+
 ## Arquitectura
 
 ```

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { SyncStatus } from "@/lib/types";
 import { fmtDateTime, fmtRelative } from "@/lib/format";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 export const STATE_INFO: Record<SyncStatus["state"], { label: string; color: string; desc: string }> = {
   fresh: { label: "Datos actualizados", color: "bg-emerald-500", desc: "La última sincronización con NASA FIRMS es reciente." },
@@ -35,15 +36,15 @@ export function useStatus(intervalMs = 60_000) {
 
 export function StatusIndicator() {
   const { status } = useStatus();
-  if (!status) return <span className="text-xs text-stone-400">Cargando estado…</span>;
+  if (!status) return <Skeleton className="h-8 w-32" label="Cargando estado de datos…" />;
   const info = STATE_INFO[status.state];
   return (
     <Link
-      href="/estado"
+      href="/avanzado/estado"
       data-testid="sync-status"
       data-state={status.state}
       title={`${info.desc}${status.lastErrorMessage ? `\nÚltimo error: ${status.lastErrorMessage}` : ""}`}
-      className="flex items-center gap-2 rounded-full border border-stone-200 bg-white px-3 py-1 text-xs hover:bg-stone-50"
+      className="flex min-h-9 items-center gap-2 rounded-full border border-[var(--color-brand-500)]/30 bg-white px-3 py-1 text-xs text-[var(--color-text)] hover:bg-[var(--color-brand-50)]"
     >
       <span className={`h-2.5 w-2.5 rounded-full ${info.color} ${status.running ? "animate-pulse" : ""}`} />
       <span className="font-medium">{status.running ? "Sincronizando…" : info.label}</span>

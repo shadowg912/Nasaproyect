@@ -6,6 +6,7 @@ import { fmtNumber } from "@/lib/format";
 import { addDays } from "@/lib/dates";
 import { FilterBar } from "./FilterBar";
 import { MonthlyChart, SeasonalityChart } from "./Charts";
+import { Skeleton, SkeletonLines } from "./ui/Skeleton";
 
 const HISTORY_PRESETS = PRESETS.filter((p) => p.id === "30d" || p.id === "365d" || p.id === "all");
 
@@ -28,22 +29,24 @@ export function HistoryView() {
   const total = data?.byYear.reduce((s, y) => s + y.count, 0) ?? 0;
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold">Análisis histórico</h1>
-        <p className="text-sm text-stone-600">
+    <article className="space-y-5 rounded-[var(--radius-lg)] bg-[var(--color-brand-50)] p-4 sm:p-7">
+      <header className="max-w-3xl">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-brand-700)]">Contexto temporal</p>
+        <h1 className="text-3xl font-black tracking-tight text-[var(--color-brand-900)]">Análisis histórico</h1>
+        <p className="mt-2 text-[var(--color-text)]">
           Basado únicamente en los datos guardados en la base local. El historial depende de los intervalos importados
           (ver cobertura abajo); los productos de tiempo casi real (NRT) solo cubren los últimos meses.
         </p>
-      </div>
+      </header>
       <FilterBar filters={filters} update={update} presets={HISTORY_PRESETS} />
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="card lg:col-span-2">
-          <h2 className="card-title">Detecciones por mes</h2>
-          <div className="h-64"><MonthlyChart data={data?.byMonth ?? []} /></div>
-        </div>
-        <div className="card">
-          <h2 className="card-title">Por año</h2>
+        <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)] lg:col-span-2">
+          <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Detecciones por mes</h2>
+          <div className="mt-4 h-64">{data ? <MonthlyChart data={data.byMonth} /> : <Skeleton className="h-full" label="Cargando detecciones por mes…" />}</div>
+        </section>
+        <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+          <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Por año</h2>
+          {!data && <div className="mt-4"><SkeletonLines lines={5} /></div>}
           <ul className="space-y-1 text-sm">
             {data?.byYear.map((y) => (
               <li key={y.year} className="flex justify-between border-b border-stone-100 py-1"><span>{y.year}</span><span className="tabular-nums">{fmtNumber(y.count)}</span></li>
@@ -51,14 +54,14 @@ export function HistoryView() {
             {!data?.byYear.length && <li className="text-stone-400">Sin datos</li>}
           </ul>
           <p className="mt-2 text-xs text-stone-500">Total: {fmtNumber(total)}</p>
-        </div>
-        <div className="card lg:col-span-2">
-          <h2 className="card-title">Estacionalidad: promedio mensual por año</h2>
-          <div className="h-56"><SeasonalityChart data={data?.monthOfYear ?? []} /></div>
+        </section>
+        <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)] lg:col-span-2">
+          <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Estacionalidad: promedio mensual por año</h2>
+          <div className="mt-4 h-56">{data ? <SeasonalityChart data={data.monthOfYear} /> : <Skeleton className="h-full" label="Cargando estacionalidad…" />}</div>
           <p className="mt-2 text-xs text-stone-500">En RD la temporada seca (aprox. enero–abril) concentra la mayoría de los incendios forestales y quemas agrícolas.</p>
-        </div>
-        <div className="card">
-          <h2 className="card-title">Municipios con más detecciones</h2>
+        </section>
+        <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+          <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Municipios con más detecciones</h2>
           <ol className="space-y-1 text-sm">
             {data?.topMunicipalities.map((m, i) => (
               <li key={m.id} className="flex justify-between gap-2">
@@ -68,10 +71,10 @@ export function HistoryView() {
             ))}
             {!data?.topMunicipalities.length && <li className="text-stone-400">Sin datos</li>}
           </ol>
-        </div>
+        </section>
       </div>
-      <div className="card">
-        <h2 className="card-title">Cobertura de datos descargados</h2>
+      <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+        <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Cobertura de datos descargados</h2>
         {Object.keys(coverage).length === 0 ? (
           <p className="text-sm text-stone-500">Aún no hay intervalos registrados. Use <code>npm run sync:firms</code> o <code>npm run import:history</code>.</p>
         ) : (
@@ -87,7 +90,7 @@ export function HistoryView() {
             </tbody>
           </table>
         )}
-      </div>
-    </div>
+      </section>
+    </article>
   );
 }

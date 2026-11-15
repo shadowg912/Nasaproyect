@@ -1,7 +1,5 @@
-import { StatusView } from "@/components/StatusView";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "Estado — Fuego RD" };
-
-export default function Page() {
-  return <StatusView />;
+export default function EstadoRedirect() {
+  redirect("/avanzado/estado");
 }

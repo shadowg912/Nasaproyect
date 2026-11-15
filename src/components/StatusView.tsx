@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useApi } from "@/lib/useApi";
 import { fmtDateTime, fmtNumber, fmtRelative } from "@/lib/format";
 import { notifyStatusChanged, STATE_INFO, useStatus } from "./StatusIndicator";
+import { Button } from "./ui/Button";
+import { Skeleton, SkeletonLines } from "./ui/Skeleton";
 
 interface Run {
   id: number; kind: string; trigger: string; status: string; sources: string; dateFrom: string | null; dateTo: string | null;
@@ -45,12 +47,17 @@ export function StatusView() {
 
   const info = status ? STATE_INFO[status.state] : null;
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Estado de los datos</h1>
+    <article className="space-y-6 rounded-[var(--radius-lg)] bg-[var(--color-brand-50)] p-4 sm:p-7">
+      <header className="max-w-3xl">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-brand-700)]">Avanzado</p>
+        <h1 className="text-3xl font-black tracking-tight text-[var(--color-brand-900)]">Estado de los datos</h1>
+        <p className="mt-2 text-[var(--color-text)]">Consulta la actualización local, el origen de la descarga y las ejecuciones recientes.</p>
+      </header>
+      {!status && <div className="grid gap-4 md:grid-cols-3"><Skeleton className="h-56 md:col-span-2" /><Skeleton className="h-56" /></div>}
       {status && info && (
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="card md:col-span-2">
-            <div className="flex items-center gap-2 text-lg font-semibold" data-testid="status-label">
+          <section className="rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)] md:col-span-2">
+            <div className="flex items-center gap-2 text-lg font-bold text-[var(--color-brand-900)]" data-testid="status-label">
               <span className={`h-3 w-3 rounded-full ${info.color}`} /> {info.label}
             </div>
             <p className="mt-1 text-sm text-stone-600">{info.desc}</p>
@@ -65,27 +72,28 @@ export function StatusView() {
               <dt className="text-stone-500">Fuente de sincronización</dt>
               <dd>{status.hasMapKey ? "API de área de NASA FIRMS (MAP_KEY configurada)" : "Feed público de FIRMS, últimos 7 días (sin MAP_KEY)"}</dd>
             </dl>
-          </div>
-          <div className="card space-y-3">
-            <button type="button" className="btn btn-primary w-full justify-center" disabled={busy || status.running} onClick={syncNow}>
+          </section>
+          <aside className="space-y-3 rounded-[var(--radius-md)] bg-[var(--color-brand-900)] p-5 text-white shadow-[var(--shadow-float)]">
+            <Button variant="glass" className="w-full" disabled={busy || status.running} onClick={syncNow}>
               {busy || status.running ? "Sincronizando…" : "Sincronizar ahora"}
-            </button>
+            </Button>
             {msg && <p className="text-sm" role="status">{msg}</p>}
-            <p className="text-xs text-stone-500">
+            <p className="text-xs text-[var(--color-ink-muted)]">
               También desde la terminal: <code>npm run sync:firms</code>. Para sincronización periódica: <code>npm run sync:watch</code> o
               el planificador del sistema (ver README).
             </p>
             {!status.hasMapKey && (
-              <p className="rounded-lg bg-fuego-50 p-2 text-xs text-fuego-700">
+              <p className="rounded-[var(--radius-sm)] bg-white/10 p-3 text-xs text-[var(--color-ink-muted)]">
                 Sin <code>FIRMS_MAP_KEY</code> solo se descargan los últimos 7 días y no es posible importar historial. Solicite una clave
                 gratuita en firms.modaps.eosdis.nasa.gov/api/map_key y agréguela a <code>.env</code>.
               </p>
             )}
-          </div>
+          </aside>
         </div>
       )}
-      <div className="card overflow-x-auto">
-        <h2 className="card-title">Ejecuciones recientes</h2>
+      <section className="overflow-x-auto rounded-[var(--radius-md)] bg-white p-5 shadow-[var(--shadow-float)]">
+        <h2 className="text-lg font-bold text-[var(--color-brand-900)]">Ejecuciones recientes</h2>
+        {!runs && <div className="mt-4"><SkeletonLines /></div>}
         <table className="w-full min-w-[44rem] text-left text-sm">
           <thead className="text-xs text-stone-500">
             <tr><th>Inicio</th><th>Tipo</th><th>Resultado</th><th>Periodo</th><th className="text-right">Filas</th><th className="text-right">En RD</th><th className="text-right">Nuevas</th><th className="text-right">Actualiz.</th><th>Error</th></tr>
@@ -107,7 +115,7 @@ export function StatusView() {
             {runs && !runs.length && <tr><td colSpan={9} className="py-4 text-center text-stone-400">Aún no hay ejecuciones.</td></tr>}
           </tbody>
         </table>
-      </div>
-    </div>
+      </section>
+    </article>
   );
 }
