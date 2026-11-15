@@ -3,7 +3,7 @@ import { getContext } from "@/server/context";
 import type { NormalizedDetection } from "@/server/firms/csv";
 import { saveDetections } from "@/server/history/store";
 import { gibsUrl, GIBS_LAYER } from "@/server/nasa/gibs";
-import { fetchPower } from "@/server/nasa/power";
+import { fetchPower, fetchWeather } from "@/server/nasa/power";
 import { tempDb } from "../helpers";
 
 let ctx: ReturnType<typeof tempDb>;
@@ -91,5 +91,19 @@ describe("hallazgos de la revisión final", () => {
     await fetchPower(ctx.db, 18.75, -70.16, "2023-03-15", f.impl);
     await fetchPower(ctx.db, 18.75, -70.16, "2023-03-15", f.impl);
     expect(f.calls).toHaveLength(2);
+  });
+});
+
+describe("clima de respaldo (Open-Meteo)", () => {
+  it("si POWER aún no tiene datos, usa Open-Meteo", async () => {
+    const calls: string[] = [];
+    const impl = async (url: string) => {
+      calls.push(url);
+      if (url.includes("power.larc.nasa.gov")) return new Response(power(-999, -999));
+      return new Response(JSON.stringify({ daily: { time: ["2026-11-14"], wind_speed_10m_max: [5.1], wind_direction_10m_dominant: [80], temperature_2m_mean: [27.3], relative_humidity_2m_mean: [71], precipitation_sum: [1.2] } }));
+    };
+    const w = await fetchWeather(ctx.db, 18.75, -70.16, "2026-11-14", impl);
+    expect(w).toEqual({ windSpeed: 5.1, windDir: 80, t2m: 27.3, rh: 71, precip: 1.2, source: "Open-Meteo" });
+    expect(calls.some((u) => u.includes("open-meteo.com"))).toBe(true);
   });
 });

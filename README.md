@@ -156,6 +156,7 @@ que se corrigen (`Hermanas` → Hermanas Mirabal, `La Estrelleta` → Elías Pi�
 | Esri | Fondos opcionales: [Streets y Topographic](https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer), [Light/Dark Gray](https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer) y [Firefly](https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer) | Términos de Esri, atribución visible y sin caché. |
 | UNEP-WCMC WDPA | Áreas protegidas | Uso no comercial con atribución, según los términos de Protected Planet. |
 | Smithsonian GVP | Volcanes holocenos | Uso con cita. |
+| Open-Meteo (https://open-meteo.com) | Clima del día de un foco cuando NASA POWER aún no publica ese día | CC BY 4.0, atribución obligatoria. |
 | Natural Earth | Límites mundiales | Dominio público. |
 | geoBoundaries | Límites administrativos | CC BY 4.0. |
 

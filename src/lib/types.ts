@@ -151,7 +151,8 @@ export interface CalendarResponse {
 
 export interface DetectionContext {
   imagery: { url: string; date: string; layer: string } | null;
-  weather: { windSpeed: number; windDir: number; t2m: number; rh: number; precip: number } | null;
+  /** Clima del día; `source`: «NASA POWER» o «Open-Meteo» (respaldo). */
+  weather: { windSpeed: number; windDir: number; t2m: number; rh: number; precip: number; source?: string } | null;
   cause: { label: string; likelihood: "alta" | "media" | "baja"; reasons: string[] };
   spread: { bearing: number; note: string } | null;
 }

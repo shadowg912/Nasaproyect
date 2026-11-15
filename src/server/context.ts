@@ -3,7 +3,7 @@ import type { DetectionContext } from "@/lib/types";
 import type { FetchLike } from "./firms/client";
 import { CELL_DEG } from "./harmonize/cells";
 import { GIBS_LAYER, localImageryUrl } from "./nasa/gibs";
-import { fetchPower } from "./nasa/power";
+import { fetchWeather } from "./nasa/power";
 
 const RECURRENT_YEARS = 3;
 const RECURRENT_HIGH_YEARS = 5;
@@ -86,7 +86,7 @@ export async function getContext(db: DB, id: string, fetchImpl: FetchLike = fetc
     .prepare("SELECT id, latitude, longitude, acq_date, fire_type, country_iso3 FROM fire_detections WHERE id = ?")
     .get(id) as Detection | undefined;
   if (!d) return null;
-  const weather = await fetchPower(db, d.latitude, d.longitude, d.acq_date, fetchImpl).catch(() => null);
+  const weather = await fetchWeather(db, d.latitude, d.longitude, d.acq_date, fetchImpl).catch(() => null);
   return {
     imagery: { url: localImageryUrl(d.latitude, d.longitude, d.acq_date), date: d.acq_date, layer: GIBS_LAYER },
     weather,

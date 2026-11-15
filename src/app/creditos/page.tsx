@@ -8,6 +8,7 @@ const sources = [
   ["Esri World Imagery, Streets, Gray y Topographic", "Esri y colaboradores", "Fondos cartográficos opcionales.", "Términos de Esri, atribución obligatoria; no se almacenan en caché."],
   ["WDPA / Protected Planet", "UNEP-WCMC e IUCN", "Áreas protegidas.", "Uso no comercial con atribución, según términos de WDPA."],
   ["Global Volcanism Program", "Smithsonian Institution", "Volcanes holocenos.", "Uso con cita."],
+  ["Open-Meteo", "Open-Meteo.com", "Clima del día de un foco cuando NASA POWER aún no publica ese día.", "CC BY 4.0, con atribución."],
   ["Natural Earth", "Natural Earth", "Límites administrativos de referencia.", "Dominio público."],
   ["geoBoundaries", "William & Mary / contribuidores", "Límites administrativos locales.", "CC BY 4.0."],
 ];
