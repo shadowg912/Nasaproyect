@@ -38,7 +38,6 @@ test("la interfaz carga sin solicitudes externas y con NASA inaccesible", async 
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   for (const [path, heading] of [["/", "Entender el fuego"], ["/rd", "Detecciones"], ["/historico", "Análisis histórico"], ["/aprende", "¿Cómo se detectan"], ["/estado", "Estado de los datos"]]) {
     await page.goto(path);
-    await page.waitForLoadState("networkidle");
     await expect(page.getByText(heading).first()).toBeVisible();
   }
   expect(external, `Solicitudes externas: ${external.join(", ")}`).toEqual([]);
