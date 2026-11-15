@@ -52,3 +52,21 @@ describe("consultas locales", () => {
     void HEADER;
   });
 });
+
+describe("filtros de país, área y sensor", () => {
+  it("parseFilters acepta iso3, aoi en bbox y familia de sensor", () => {
+    expect(parseFilters(new URLSearchParams("iso3=dom&aoi=-70.5,18,-69,19.5&sensor=VIIRS"))).toEqual({
+      iso3: "DOM", bbox: [-70.5, 18, -69, 19.5], sensorFamily: "VIIRS",
+    });
+    expect(parseFilters(new URLSearchParams("aoi=basura&sensor=OTRO"))).toEqual({});
+  });
+
+  it("listDetections filtra por área y sensor", () => {
+    const all = listDetections(ctx.db, {}).rows;
+    const one = all[0];
+    const box: [number, number, number, number] = [one.longitude - 0.001, one.latitude - 0.001, one.longitude + 0.001, one.latitude + 0.001];
+    expect(listDetections(ctx.db, { bbox: box }).rows.map((r) => r.id)).toEqual([one.id]);
+    expect(listDetections(ctx.db, { sensorFamily: "MODIS" }).rows).toHaveLength(0);
+    expect(listDetections(ctx.db, { iso3: "HTI" }).rows).toHaveLength(0);
+  });
+});

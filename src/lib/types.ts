@@ -29,6 +29,11 @@ export interface DetectionFilters {
   provinceId?: number;
   municipalityId?: number;
   daynight?: "D" | "N";
+  /** País ISO3 (los datos previos a la armonización son todos de RD). */
+  iso3?: string;
+  /** Área de interés `[oeste, sur, este, norte]`. */
+  bbox?: [number, number, number, number];
+  sensorFamily?: SensorFamily;
 }
 
 export interface Stats {

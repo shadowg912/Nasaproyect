@@ -41,8 +41,17 @@ export function parseFilters(sp: URLSearchParams): DetectionFilters {
   if (Number.isInteger(mun) && mun > 0) f.municipalityId = mun;
   const dn = sp.get("daynight");
   if (dn === "D" || dn === "N") f.daynight = dn;
+  const iso3 = (sp.get("iso3") ?? "").trim().toUpperCase();
+  if (/^[A-Z]{3}$/.test(iso3)) f.iso3 = iso3;
+  const box = (sp.get("aoi") ?? "").split(",").map(Number);
+  if (box.length === 4 && box.every(Number.isFinite) && box[0] < box[2] && box[1] < box[3]) f.bbox = box as [number, number, number, number];
+  const sensor = sp.get("sensor");
+  if (sensor === "MODIS" || sensor === "VIIRS") f.sensorFamily = sensor;
   return f;
 }
+
+/** Familia de sensor también para filas antiguas sin `sensor_family`. */
+const FAMILY_SQL = "COALESCE(d.sensor_family, CASE WHEN d.instrument LIKE 'MODIS%' THEN 'MODIS' ELSE 'VIIRS' END)";
 
 export function buildWhere(f: DetectionFilters) {
   const clauses = [DEDUPE];
@@ -60,6 +69,12 @@ export function buildWhere(f: DetectionFilters) {
   if (f.provinceId) (clauses.push("d.province_id = ?"), params.push(f.provinceId));
   if (f.municipalityId) (clauses.push("d.municipality_id = ?"), params.push(f.municipalityId));
   if (f.daynight) (clauses.push("d.daynight = ?"), params.push(f.daynight));
+  if (f.iso3) (clauses.push("d.country_iso3 = ?"), params.push(f.iso3));
+  if (f.bbox) {
+    clauses.push("d.longitude BETWEEN ? AND ? AND d.latitude BETWEEN ? AND ?");
+    params.push(f.bbox[0], f.bbox[2], f.bbox[1], f.bbox[3]);
+  }
+  if (f.sensorFamily) (clauses.push(`${FAMILY_SQL} = ?`), params.push(f.sensorFamily));
   return { sql: `WHERE ${clauses.join(" AND ")}`, params };
 }
 

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { seedCountries } from "@/server/history/countries";
+import { listCountries, seedCountries } from "@/server/history/countries";
 import { importAreaFile, importCountry } from "@/server/history/importCountry";
 import { getLoad, startLoad } from "@/server/history/jobs";
 import { rebuildHarmonized } from "@/server/history/rebuild";
@@ -99,5 +99,18 @@ describe("trabajos de carga y reconstrucción", () => {
     expect(keys.some((k) => k.startsWith("DOM:p:"))).toBe(true);
     const row = ctx.db.$client.prepare("SELECT modis_raw, viirs_raw FROM harmonized_monthly WHERE region_key='DOM' AND year=2005 AND month=1").get();
     expect(row).toEqual({ modis_raw: 3, viirs_raw: 0 });
+  });
+});
+
+describe("lista de países para el mapa global", () => {
+  it("marca RD como cargada con sus años y la fecha del último foco", async () => {
+    await importCountry(ctx.db, ctx.cfg, "DOM", { fetchImpl: firmsMock().impl, years: YEARS });
+    const list = listCountries(ctx.db);
+    expect(list.length).toBeGreaterThan(150);
+    expect(list.find((c) => c.iso3 === "DOM")).toEqual({
+      iso3: "DOM", name: "República Dominicana", loaded: true, mode: "full", progress: 1,
+      years: { modis: [2005, 2005], viirs: [2015, 2015] }, dataUntil: "2015-01-01",
+    });
+    expect(list.find((c) => c.iso3 === "HTI")).toMatchObject({ loaded: false, mode: null, progress: 0, dataUntil: null });
   });
 });
