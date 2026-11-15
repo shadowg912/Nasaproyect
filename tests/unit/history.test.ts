@@ -114,3 +114,12 @@ describe("lista de países para el mapa global", () => {
     expect(list.find((c) => c.iso3 === "HTI")).toMatchObject({ loaded: false, mode: null, progress: 0, dataUntil: null });
   });
 });
+
+describe("hallazgos de la revisión final", () => {
+  it("una carga en la que fallan todos los archivos termina en error", async () => {
+    const job = startLoad(ctx.db, ctx.cfg, "HTI", { fetchImpl: async () => new Response("caído", { status: 503 }), years: YEARS });
+    await job.finished;
+    expect(getLoad("HTI")).toMatchObject({ state: "error" });
+    expect(getLoad("HTI")!.error).toMatch(/Fallaron/);
+  });
+});

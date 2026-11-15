@@ -118,6 +118,7 @@ export async function importCountry(db: DB, cfg: AppConfig, iso3: string, opts: 
   sqlite
     .prepare("UPDATE ingestion_runs SET status = ?, finished_at = ?, rows_inserted = ? WHERE id = ?")
     .run(failed === 0 ? "success" : failed === tasks.length ? "failed" : "partial", new Date().toISOString(), rows, runId);
+  if (tasks.length > 0 && failed === tasks.length) throw new Error(`Fallaron los ${failed} archivos de ${iso3}; revise la conexión con NASA FIRMS.`);
   return { rows, mode };
 }
 

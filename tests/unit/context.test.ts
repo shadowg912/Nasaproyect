@@ -84,3 +84,12 @@ describe("contexto de un foco", () => {
     expect(await getContext(ctx.db, "nope", mockFetch(() => "").impl)).toBeNull();
   });
 });
+
+describe("hallazgos de la revisión final", () => {
+  it("no guarda en caché una respuesta de POWER sin datos (-999)", async () => {
+    const f = mockFetch(() => power(-999, -999));
+    await fetchPower(ctx.db, 18.75, -70.16, "2023-03-15", f.impl);
+    await fetchPower(ctx.db, 18.75, -70.16, "2023-03-15", f.impl);
+    expect(f.calls).toHaveLength(2);
+  });
+});

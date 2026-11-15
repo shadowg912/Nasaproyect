@@ -139,3 +139,11 @@ describe("mediana y anomalías", () => {
     expect(cells[2].anomaly).toBeNull();
   });
 });
+
+describe("hallazgos de la revisión final", () => {
+  it("un mes con Suomi NPP parcial usa NOAA-20 si da más", () => {
+    const cal = { k: 3, ci: [3, 3] as [number, number], r2: 1, overlapYears: [2012, 2025] as [number, number], kTerra: 6, kNoaa20: 1.1, source: "region" as const };
+    const m: ReturnType<typeof monthlyCounts> = new Map([["2026-11", { modisRaw: 5, viirsRaw: 40, modisCd: 3, viirsCd: 2, terraCd: 1, noaa20Cd: 20 }]]);
+    expect(harmonizedSeries(m, cal, 2026).find((c) => c.year === 2026 && c.month === 11)!.harmonized).toBeCloseTo(22, 9);
+  });
+});

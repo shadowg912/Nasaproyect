@@ -53,7 +53,9 @@ function aoiRegion(db: DB, q: RegionQuery, countryCal: Calibration | null, until
   const aoi = parseAoi(q.aoi!);
   const rows = db.$client
     .prepare(
-      `SELECT latitude AS lat, longitude AS lon, acq_date AS acqDate, sensor_family AS family, satellite, confidence, fire_type AS fireType
+      `SELECT latitude AS lat, longitude AS lon, acq_date AS acqDate,
+         COALESCE(sensor_family, CASE WHEN instrument LIKE 'MODIS%' THEN 'MODIS' ELSE 'VIIRS' END) AS family,
+         satellite, confidence, fire_type AS fireType
        FROM fire_detections d WHERE longitude BETWEEN ? AND ? AND latitude BETWEEN ? AND ? AND ${DEDUPE}`,
     )
     .all(aoi.bbox[0], aoi.bbox[2], aoi.bbox[1], aoi.bbox[3]) as CellDetection[];

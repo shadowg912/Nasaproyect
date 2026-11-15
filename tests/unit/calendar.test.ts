@@ -119,3 +119,14 @@ describe("región y exportación", () => {
     expect(monthly[1].startsWith("2014,1,1,3,3,")).toBe(true);
   });
 });
+
+describe("hallazgos de la revisión final", () => {
+  it("un área dibujada cuenta las filas NRT sin sensor_family", () => {
+    const aoi = "-70.0,18.4,-69.85,18.6";
+    const before = getCalendar(ctx.db, { iso3: "DOM", aoi }, "harmonized", NOW).cells.find((c) => c.year === 2014 && c.month === 6)!.value;
+    ctx.db.$client.prepare("UPDATE fire_detections SET sensor_family = NULL WHERE acq_date = '2014-06-10'").run();
+    const after = getCalendar(ctx.db, { iso3: "DOM", aoi }, "harmonized", NOW).cells.find((c) => c.year === 2014 && c.month === 6)!.value;
+    expect(before).toBe(3);
+    expect(after).toBe(3);
+  });
+});
