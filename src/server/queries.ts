@@ -114,7 +114,7 @@ export function toGeoJSON(rows: DetectionRow[]) {
     features: rows.map(({ latitude, longitude, ...props }) => ({
       type: "Feature" as const,
       geometry: { type: "Point" as const, coordinates: [longitude, latitude] },
-      properties: props,
+      properties: { ...props, t: Date.parse(props.acquiredAt) },
     })),
   };
 }

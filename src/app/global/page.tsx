@@ -1,2 +1,7 @@
-import { GlobalExplorer } from "@/components/GlobalExplorer";
-export default function GlobalPage(){return <GlobalExplorer/>;}
+import { MapApp } from "@/components/map/MapApp";
+
+export const metadata = { title: "Global · Fuego RD" };
+
+export default function GlobalPage() {
+  return <MapApp mode="global" />;
+}

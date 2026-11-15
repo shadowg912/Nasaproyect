@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runSync } from "@/server/firms/ingest";
-import { getHistory, getStats, listDetections, parseFilters } from "@/server/queries";
+import { getHistory, getStats, listDetections, parseFilters, toGeoJSON } from "@/server/queries";
 import { fixture, HEADER, mockFetch, tempDb } from "../helpers";
 
 let ctx: ReturnType<typeof tempDb>;
@@ -68,5 +68,13 @@ describe("filtros de país, área y sensor", () => {
     expect(listDetections(ctx.db, { bbox: box }).rows.map((r) => r.id)).toEqual([one.id]);
     expect(listDetections(ctx.db, { sensorFamily: "MODIS" }).rows).toHaveLength(0);
     expect(listDetections(ctx.db, { iso3: "HTI" }).rows).toHaveLength(0);
+  });
+});
+
+describe("GeoJSON de detecciones para el mapa", () => {
+  it("cada foco lleva su hora de adquisición en milisegundos (t) para colorear por antigüedad", () => {
+    const fc = toGeoJSON(listDetections(ctx.db, {}).rows);
+    const f = fc.features[0];
+    expect(f.properties.t).toBe(Date.parse(f.properties.acquiredAt));
   });
 });
