@@ -18,7 +18,8 @@ decisiones y contradicciones resueltas: `docs/PLAN.md`; uso: `README.md`.
 - Rediseño visual: `docs/superpowers/specs/2026-11-15-rediseno-ui-mapa-design.md`; tokens en `src/app/globals.css` y
   `src/lib/tokens.ts`; primitivos en `src/components/ui/`; contrato del mapa en `src/lib/map/types.ts`.
 - SQLite solo en el servidor. Toda ruta o página que lo toque declara `export const runtime = "nodejs"`. Nunca Edge.
-- Los estilos de mapa no contienen URLs remotas. GeoJSON en `public/geo/`, PMTiles/fuentes/sprites en `public/maps/`.
+- Los estilos de mapa solo contienen URLs remotas para los fondos/overlays de terceros autorizados arriba (Esri, WDPA); lo de la
+  NASA va por `/api/tiles/gibs`. GeoJSON en `public/geo/`, PMTiles/fuentes/sprites en `public/maps/`.
 - La sincronización nunca borra datos; los errores se registran en `ingestion_runs`. Ausencia de detecciones ≠ fallo.
 - IDs determinísticos (`detectionId`) + upsert; bloqueo `sync_lock` para evitar sincronizaciones simultáneas.
 - La MAP_KEY nunca llega al cliente ni a los registros (`redact`).
