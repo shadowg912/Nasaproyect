@@ -60,3 +60,17 @@ describe("detectionId", () => {
     );
   });
 });
+
+describe("tipo de fuego y familia de sensor", () => {
+  it("lee la columna type de los archivos anuales por país", () => {
+    const r = parseFirmsCsv(fixture("country-modis-2005.csv"), "MODIS_SP");
+    expect(r.records.map((d) => d.fireType)).toEqual([2, 0, 0]);
+    expect(r.records.every((d) => d.sensorFamily === "MODIS")).toBe(true);
+  });
+
+  it("deja fireType en null cuando el CSV no trae type (NRT)", () => {
+    const r = parseFirmsCsv(fixture("area-viirs.csv"), "VIIRS_NOAA20_NRT");
+    expect(r.records.length).toBeGreaterThan(0);
+    expect(r.records.every((d) => d.fireType === null && d.sensorFamily === "VIIRS")).toBe(true);
+  });
+});

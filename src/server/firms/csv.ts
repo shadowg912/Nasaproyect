@@ -20,7 +20,16 @@ export interface NormalizedDetection {
   confidenceRaw: string;
   version: string | null;
   daynight: "D" | "N" | null;
+  /** Columna `type` de FIRMS (0 vegetación, 1 volcán, 2 fuente fija, 3 costa afuera); null si no viene (NRT). */
+  fireType: number | null;
+  sensorFamily: "MODIS" | "VIIRS";
 }
+
+const FIRE_TYPES = new Set([0, 1, 2, 3]);
+const fireTypeOf = (v: string | undefined): number | null => {
+  const n = num(v);
+  return n !== null && FIRE_TYPES.has(n) ? n : null;
+};
 
 export class FirmsResponseError extends Error {
   constructor(message: string) {
@@ -124,6 +133,8 @@ export function parseFirmsCsv(text: string, source: string): ParseResult {
       confidenceRaw: (r.confidence ?? "").trim(),
       version: (r.version ?? "").trim() || null,
       daynight: dn === "D" || dn === "N" ? dn : null,
+      fireType: fireTypeOf(r.type),
+      sensorFamily: ((r.instrument ?? "").trim() || instrumentDefault).toUpperCase().includes("MODIS") ? "MODIS" : "VIIRS",
     });
   }
   return { records, rejected, totalRows: parsed.data.length };
