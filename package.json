@@ -19,6 +19,7 @@
     "sync:watch": "tsx scripts/sync-watch.ts",
     "import:history": "tsx scripts/import-history.ts",
     "history:country": "tsx scripts/history-country.ts",
+    "globe:prepare": "tsx scripts/globe-prepare.ts",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },
@@ -30,6 +31,7 @@
     "@turf/centroid": "^7.4.0",
     "@turf/helpers": "^7.4.0",
     "@turf/simplify": "^7.4.0",
+    "@types/three": "^0.187.0",
     "better-sqlite3": "12.11.1",
     "drizzle-orm": "^0.45.4",
     "maplibre-gl": "^6.18.0",
@@ -39,6 +41,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "recharts": "^3.10.1",
+    "three": "^0.187.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

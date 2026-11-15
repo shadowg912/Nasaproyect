@@ -5,7 +5,7 @@ next-env.d.ts
 *.tsbuildinfo
 
 # Base de datos local (nunca versionar)
-data/
+/data/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
