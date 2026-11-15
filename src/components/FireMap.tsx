@@ -15,6 +15,7 @@ export interface FireMapProps {
   provinceCounts?: { id: number | null; count: number }[];
   selectedProvince?: number;
   onSelectProvince?: (id: number | undefined) => void;
+  onSelectDetection?: (id: string) => void;
   basemap: "pmtiles" | "geojson";
   height?: string;
 }
@@ -25,13 +26,15 @@ function escapeHtml(s: unknown) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
-export default function FireMap({ fires, provinceCounts, selectedProvince, onSelectProvince, basemap, height = "28rem" }: FireMapProps) {
+export default function FireMap({ fires, provinceCounts, selectedProvince, onSelectProvince, onSelectDetection, basemap, height = "34rem" }: FireMapProps) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"points" | "heat" | "provinces">("points");
   const onSelectRef = useRef(onSelectProvince);
   onSelectRef.current = onSelectProvince;
+  const onDetectionRef=useRef(onSelectDetection);
+  onDetectionRef.current=onSelectDetection;
 
   useEffect(() => {
     if (!container.current) return;
@@ -56,6 +59,7 @@ export default function FireMap({ fires, provinceCounts, selectedProvince, onSel
       const f = e.features?.[0];
       if (!f) return;
       const p = f.properties as Record<string, string>;
+      if(onDetectionRef.current && p.id) { onDetectionRef.current(p.id); return; }
       const conf = p.confidence as Confidence;
       new maplibregl.Popup({ maxWidth: "260px" })
         .setLngLat((f.geometry as GeoJSON.Point).coordinates as [number, number])

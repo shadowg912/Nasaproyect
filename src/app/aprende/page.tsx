@@ -3,7 +3,14 @@ export const metadata = { title: "Aprende — Fuego RD" };
 export default function Page() {
   return (
     <article className="prose-es mx-auto max-w-3xl">
+      <p className="eyebrow">Guía de lectura</p>
       <h1 className="text-3xl font-bold">¿Cómo se detectan los incendios desde el espacio?</h1>
+      <dl className="card mt-5 space-y-3">
+        <div id="foco"><dt className="font-semibold">Foco de calor</dt><dd>Un punto que el satélite ve más caliente que su entorno. No equivale necesariamente a un incendio.</dd></div>
+        <div id="frp"><dt className="font-semibold">FRP</dt><dd>Energía emitida en el momento de la observación, expresada como potencia en megavatios. No mide la superficie quemada.</dd></div>
+        <div id="anomalia"><dt className="font-semibold">Anomalía</dt><dd>Comparación con lo habitual para ese mes: un valor mayor que uno indica más actividad que la mediana histórica.</dd></div>
+      </dl>
+      <details className="mt-5"><summary className="cursor-pointer font-semibold">Más sobre satélites, confianza y limitaciones</summary>
       <p className="mt-3">
         Esta aplicación muestra <b>anomalías térmicas</b> detectadas por satélites de órbita polar y publicadas por el sistema
         <b> FIRMS</b> (Fire Information for Resource Management System) de la NASA. Cada punto del mapa es un píxel donde el
@@ -58,12 +65,7 @@ export default function Page() {
         montaña como la Cordillera Central y la Sierra de Bahoruco, y en áreas agrícolas donde se practica la quema.
       </p>
 
-      <h2>Si ve un incendio</h2>
-      <ul>
-        <li>Llame al <b>911</b> (Sistema Nacional de Atención a Emergencias y Seguridad).</li>
-        <li>Informe al Ministerio de Medio Ambiente y Recursos Naturales o al cuerpo de bomberos más cercano.</li>
-        <li>No intente apagar incendios grandes por su cuenta; aléjese en dirección contraria al viento.</li>
-      </ul>
+      </details>
       <p className="mt-6 text-sm text-stone-500">
         Fuente científica: NASA FIRMS — LANCE / EOSDIS. Esta herramienta es informativa y no reemplaza los canales oficiales.
       </p>

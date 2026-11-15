@@ -9,6 +9,9 @@ import { FilterBar } from "./FilterBar";
 import { ConfidenceChart, DailyChart, ProvinceChart, SatelliteList } from "./Charts";
 import { useStatus, STATE_INFO } from "./StatusIndicator";
 import Link from "next/link";
+import { useState } from "react";
+import { Calendar } from "./Calendar";
+import { DetectionDetail } from "./DetectionDetail";
 
 const FireMap = dynamic(() => import("./FireMap"), { ssr: false, loading: () => <div className="h-[28rem] animate-pulse rounded-xl bg-stone-200" /> });
 
@@ -25,6 +28,7 @@ function Kpi({ label, value, hint, testId }: { label: string; value: string; hin
 }
 
 export function Dashboard({ basemap }: { basemap: "pmtiles" | "geojson" }) {
+  const [selectedDetection,setSelectedDetection] = useState<string|null>(null);
   const { filters, update, apiQuery } = useFilters("7d");
   const { status } = useStatus();
   const refreshKey = status?.lastSuccessAt ?? 0;
@@ -43,18 +47,20 @@ export function Dashboard({ basemap }: { basemap: "pmtiles" | "geojson" }) {
         </div>
       )}
       <FilterBar filters={filters} update={update} />
+      <p className="text-sm text-stone-600">Los filtros de periodo, satélite y confianza afectan el mapa y los indicadores. El calendario usa el historial completo de la provincia o municipio elegidos.</p>
       {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</div>}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi testId="kpi-total" label="Detecciones" value={stats ? fmtNumber(stats.total) : "…"} hint="Puntos de calor en el periodo" />
         <Kpi label="Confianza alta" value={stats ? fmtNumber(stats.highConfidence) : "…"} hint={stats && stats.total ? `${Math.round((stats.highConfidence / stats.total) * 100)} % del total` : undefined} />
         <Kpi label="Provincias afectadas" value={stats ? fmtNumber(stats.provincesAffected) : "…"} hint="De 32 (incl. Distrito Nacional)" />
-        <Kpi label="FRP total" value={stats ? `${fmtNumber(stats.totalFrp)} MW` : "…"} hint="Potencia radiativa del fuego" />
+        <Kpi label="Energía observada (FRP)" value={stats ? `${fmtNumber(stats.totalFrp)} MW` : "…"} hint="Potencia emitida al observar el foco; no es superficie quemada" />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <FireMap
+            onSelectDetection={setSelectedDetection}
             basemap={basemap}
             fires={fires}
             provinceCounts={stats?.byProvince}
@@ -97,7 +103,7 @@ export function Dashboard({ basemap }: { basemap: "pmtiles" | "geojson" }) {
                   const p = f.properties;
                   return (
                     <tr key={String(p.id)} className="border-t border-stone-100">
-                      <td className="py-1 pr-3 whitespace-nowrap">{fmtDateTime(String(p.acquiredAt))}</td>
+                      <td className="py-1 pr-3 whitespace-nowrap"><button className="text-teal-800 underline" onClick={()=>setSelectedDetection(String(p.id))} aria-label={`Ver contexto del foco ${fmtDateTime(String(p.acquiredAt))}`}>{fmtDateTime(String(p.acquiredAt))}</button></td>
                       <td className="pr-3">{p.municipality ?? "—"}<span className="text-stone-500">, {p.province ?? "—"}</span></td>
                       <td className="pr-3 whitespace-nowrap"><span style={{ color: CONFIDENCE_COLOR[p.confidence as Confidence] }}>●</span> {CONFIDENCE_LABEL[p.confidence as Confidence]}</td>
                       <td className="pr-3 text-right tabular-nums">{p.frp != null ? fmtNumber(Number(p.frp), 1) : "—"}</td>
@@ -114,6 +120,8 @@ export function Dashboard({ basemap }: { basemap: "pmtiles" | "geojson" }) {
       <p className="text-xs text-stone-500">
         Todas las cifras se calculan con la base de datos local. Dato más reciente: {fmtDateTime(status?.latestDetectionAt)}.
       </p>
+      <Calendar region={{iso3:'DOM',provinceId:filters.province?Number(filters.province):undefined,municipalityId:filters.municipality?Number(filters.municipality):undefined}}/>
+      <DetectionDetail id={selectedDetection} onClose={()=>setSelectedDetection(null)}/>
     </div>
   );
 }

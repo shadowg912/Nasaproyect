@@ -3,7 +3,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, Res
 import { CONFIDENCE_COLOR, fmtDate, fmtMonth, fmtNumber, MONTHS } from "@/lib/format";
 import { CONFIDENCE_LABEL, SATELLITE_LABEL, type Confidence } from "@/lib/types";
 
-const FIRE = "#ea580c";
+const FIRE = "#08768c";
 const Empty = () => <div className="flex h-full items-center justify-center text-sm text-stone-400">Sin datos para los filtros seleccionados</div>;
 
 export function DailyChart({ data }: { data: { date: string; count: number }[] }) {

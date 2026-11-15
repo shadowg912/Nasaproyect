@@ -73,8 +73,8 @@ export function geojsonStyle(origin: string): StyleSpecification {
     version: 8,
     sources: overlaySources(origin),
     layers: [
-      { id: "sea", type: "background", paint: { "background-color": "#dbeaf2" } },
-      { id: "land", type: "fill", source: "country", paint: { "fill-color": "#f5f1e8" } },
+      { id: "sea", type: "background", paint: { "background-color": "#e5eef2" } },
+      { id: "land", type: "fill", source: "country", paint: { "fill-color": "#f4f5ef" } },
       ...overlay(),
     ],
   };
