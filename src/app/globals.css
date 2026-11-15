@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-fuego-50: #fff7ed;
+  --color-fuego-100: #ffedd5;
+  --color-fuego-500: #f97316;
+  --color-fuego-600: #ea580c;
+  --color-fuego-700: #c2410c;
+  --color-tierra-900: #1f1a14;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+html { color-scheme: light; }
+body { @apply bg-stone-50 text-stone-900 antialiased; }
+
+.card { @apply rounded-xl border border-stone-200 bg-white p-4 shadow-sm; }
+.card-title { @apply mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500; }
+.btn { @apply inline-flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-sm font-medium hover:bg-stone-100 disabled:opacity-50; }
+.btn-primary { @apply border-fuego-600 bg-fuego-600 text-white hover:bg-fuego-700; }
+.chip { @apply rounded-full border px-3 py-1 text-sm transition-colors; }
+.chip-on { @apply border-fuego-600 bg-fuego-600 text-white; }
+.chip-off { @apply border-stone-300 bg-white text-stone-700 hover:bg-stone-100; }
+.input { @apply rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-sm; }
+.prose-es h2 { @apply mt-8 mb-3 text-xl font-bold text-stone-900; }
+.prose-es h3 { @apply mt-5 mb-2 text-lg font-semibold; }
+.prose-es p, .prose-es li { @apply leading-relaxed text-stone-700; }
+.prose-es ul { @apply list-disc space-y-1 pl-6; }
+
+.maplibregl-popup-content { @apply rounded-lg! p-3! shadow-lg!; }

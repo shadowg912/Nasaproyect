@@ -1,0 +1,33 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Base de datos local (nunca versionar)
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+.env
+.env.local
+.env*.local
+
+# Herramientas y artefactos locales
+.cache/
+test-results/
+playwright-report/
+# PMTiles grande: se genera con npm run maps:prepare
+public/maps/*.pmtiles
+public/vendor/
+
+# Registros y restos locales de instalación
+*.log
+node_modules.node22-failed/
+.tools/
+
+# Herramientas de agentes (instalación local de ECC y espacio de trabajo de planes)
+.claude/
+.superpowers/

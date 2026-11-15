@@ -1,0 +1,30 @@
+{
+  "provider": "geoBoundaries (William & Mary geoLab)",
+  "retrieved": "2026-11-14T23:40:15.712Z",
+  "sources": [
+    {
+      "level": "ADM0",
+      "source": "Caribbean GeoPortal, N/A",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "year": "2020",
+      "updated": "Thu Jan 19 07:31:04 2023",
+      "url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/DOM/ADM0/geoBoundaries-DOM-ADM0.geojson"
+    },
+    {
+      "level": "ADM1",
+      "source": "Natural Earth",
+      "license": "Public Domain",
+      "year": "2022",
+      "updated": "Thu May 4 20:55:12 2023",
+      "url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/DOM/ADM1/geoBoundaries-DOM-ADM1.geojson"
+    },
+    {
+      "level": "ADM2",
+      "source": "Caribbean GeoPortal, N/A",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "year": "2020",
+      "updated": "Thu Jan 19 07:31:04 2023",
+      "url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/DOM/ADM2/geoBoundaries-DOM-ADM2.geojson"
+    }
+  ]
+}
