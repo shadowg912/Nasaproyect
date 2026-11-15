@@ -7,10 +7,11 @@ import { TopBar } from "./TopBar";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const isMap = pathname === "/global" || pathname === "/local" || pathname === "/rd";
 
   return (
-    <>
+    <div className={isHome ? "home-shell" : undefined}>
       <a className="skip-link sr-only-focusable" href="#contenido">Saltar al contenido</a>
       <TopBar />
       <main
@@ -27,6 +28,6 @@ export function AppShell({ children }: { children: ReactNode }) {
         </footer>
       )}
       <AiChat />
-    </>
+    </div>
   );
 }

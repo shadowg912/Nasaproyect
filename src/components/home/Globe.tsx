@@ -38,14 +38,14 @@ export default function Globe() {
     setWebgl(true);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-    camera.position.set(0, 0, 4.1);
+    camera.position.set(0, 0, 5.4);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
     host.appendChild(renderer.domElement);
 
     const globe = new THREE.Group();
     scene.add(globe);
-    const material = new THREE.MeshPhongMaterial({ color: COLORS.brand700, shininess: 8, specular: 0x163a58 });
+    const material = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 8, specular: 0x163a58 });
     const earth = new THREE.Mesh(new THREE.SphereGeometry(1.38, 72, 72), material);
     globe.add(earth);
     globe.add(new THREE.Mesh(new THREE.SphereGeometry(1.405, 72, 72), new THREE.MeshBasicMaterial({ color: COLORS.brand500, transparent: true, opacity: 0.08 })));
@@ -54,10 +54,12 @@ export default function Globe() {
     key.position.set(4, 2, 4);
     scene.add(key);
 
+    let disposed = false;
     const texture = new THREE.TextureLoader();
     texture.load(
       "/textures/blue-marble.jpg",
       (loaded) => {
+        if (disposed) { loaded.dispose(); return; }
         loaded.colorSpace = THREE.SRGBColorSpace;
         material.map = loaded;
         material.needsUpdate = true;
@@ -66,7 +68,6 @@ export default function Globe() {
       () => undefined,
     );
 
-    let disposed = false;
     fetch("/data/globe-fires.json")
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error("Sin focos agregados"))))
       .then((data: GlobeFires) => {
@@ -86,8 +87,8 @@ export default function Globe() {
           new THREE.ShaderMaterial({
             transparent: true,
             depthWrite: false,
-            uniforms: { pointColor: { value: new THREE.Color(COLORS.brand500) } },
-            vertexShader: "attribute float size; void main() { vec4 mvPosition = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (260.0 / -mvPosition.z); gl_Position = projectionMatrix * mvPosition; }",
+            uniforms: { pointColor: { value: new THREE.Color(0xffa453) } },
+            vertexShader: "attribute float size; void main() { vec4 mvPosition = modelViewMatrix * vec4(position, 1.0); gl_PointSize = clamp(size * (1.8 / -mvPosition.z), 1.5, 6.0); gl_Position = projectionMatrix * mvPosition; }",
             fragmentShader: "uniform vec3 pointColor; void main() { float d = distance(gl_PointCoord, vec2(0.5)); if (d > 0.5) discard; gl_FragColor = vec4(pointColor, 1.0 - smoothstep(0.18, 0.5, d)); }",
           }),
         );
@@ -107,6 +108,7 @@ export default function Globe() {
       const { width, height } = host.getBoundingClientRect();
       renderer.setSize(width, height, false);
       camera.aspect = width / Math.max(height, 1);
+      camera.position.z = camera.aspect < 1 ? 5.4 / camera.aspect : 5.4;
       camera.updateProjectionMatrix();
     };
     const onMotion = () => { paused = reduced.matches || host.matches(":hover") || dragging; };
@@ -164,13 +166,14 @@ export default function Globe() {
         const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
         materials.forEach((item) => item?.dispose());
       });
+      material.map?.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
   }, []);
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[var(--radius-lg)] bg-[radial-gradient(circle_at_58%_44%,var(--color-brand-500),var(--color-brand-900)_52%,#012443)]" aria-label="Globo terrestre interactivo">
+    <div className="relative h-full w-full overflow-hidden rounded-[var(--radius-lg)] globe-stage" aria-label="Globo terrestre interactivo">
       <div ref={hostRef} className="h-full w-full touch-none cursor-grab active:cursor-grabbing" aria-hidden="true" />
       {webgl === false && (
         <img
@@ -181,6 +184,7 @@ export default function Globe() {
         />
       )}
       {webgl === null && <span className="sr-only" role="status">Cargando globo…</span>}
+      <p className="absolute left-5 top-5 text-xs text-blue-100/80">NASA · Blue Marble</p>
       {period && <p className="absolute bottom-3 right-3 rounded-full bg-[var(--color-brand-900)]/85 px-3 py-1 text-xs text-white">Focos agregados: {period}</p>}
     </div>
   );

@@ -27,13 +27,17 @@ export function TopBar() {
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, []);
 
+  useEffect(() => {
+    if (open) menuRef.current?.querySelector<HTMLAnchorElement>('[role="menuitem"]')?.focus();
+  }, [open]);
+
   function closeMenu(returnFocus = false) {
     setOpen(false);
     if (returnFocus) requestAnimationFrame(() => buttonRef.current?.focus());
   }
 
   return (
-    <header className="fixed inset-x-3 top-3 z-50 mx-auto max-w-7xl" aria-label="Cabecera principal">
+    <header className="fixed inset-x-3 top-3 z-[100] mx-auto max-w-7xl" aria-label="Cabecera principal">
       <div className="glass flex h-[var(--topbar-h)] items-center justify-between gap-2 px-3 sm:px-4">
         <Link href="/" className="flex min-h-9 items-center gap-2 rounded-md pr-1 font-bold text-white hover:text-[var(--color-ink-muted)]">
           <span>Satflame</span>
@@ -60,8 +64,16 @@ export function TopBar() {
               id="advanced-menu"
               role="menu"
               aria-label="Opciones avanzadas"
-              className="glass absolute right-0 top-[calc(100%+0.5rem)] w-72 overflow-hidden p-1"
+              className="advanced-menu glass absolute right-0 top-[calc(100%+0.5rem)] w-[min(20rem,calc(100vw-2rem))] overflow-hidden p-1"
               onKeyDown={(event) => {
+                const items = Array.from(event.currentTarget.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]'));
+                const index = items.indexOf(document.activeElement as HTMLAnchorElement);
+                if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+                  event.preventDefault();
+                  const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : (index + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+                  items[next]?.focus();
+                }
+                if (event.key === "Tab") closeMenu();
                 if (event.key === "Escape") {
                   event.preventDefault();
                   closeMenu(true);
