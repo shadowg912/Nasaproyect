@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IconButton } from "@/components/ui/Button";
-import type { IconName } from "@/components/ui/Icon";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import type { ToolId } from "@/lib/map/types";
 import { useMapApp } from "./MapAppContext";
 import { LocationTool } from "./tools/LocationTool";
@@ -28,7 +27,7 @@ export function Toolbar() {
   const select = (id: ToolId) => {
     if (id === "capture" && map) {
       const link = document.createElement("a");
-      link.download = "fuego-rd-" + state.date + ".png";
+      link.download = "satflame-" + state.date + ".png";
       link.href = map.getCanvas().toDataURL("image/png");
       link.click();
       return;
@@ -52,12 +51,21 @@ export function Toolbar() {
     window.addEventListener("keydown", keys);
     return () => window.removeEventListener("keydown", keys);
   });
-  const visible = more ? actions : actions.slice(0, 4);
   return (
     <>
-      <div className="glass fixed bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-stretch gap-1 p-1" role="toolbar" aria-label="Herramientas del mapa">
-        {visible.map((action, index) => <IconButton key={action.id} label={action.label} icon={action.icon} pressed={active(action.id)} showLabel className={index > 3 ? "hidden sm:inline-flex" : ""} onClick={() => select(action.id)} />)}
-        <IconButton label={more ? "Menos herramientas" : "Más herramientas"} icon="menu" showLabel className="sm:hidden" onClick={() => setMore((value) => !value)} />
+      <div className="glass tool-bar fixed bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 p-1.5" role="toolbar" aria-label="Herramientas del mapa">
+        {actions.map((action, index) => (
+          <button key={action.id} type="button" aria-label={action.label} aria-pressed={active(action.id)} title={action.label}
+            className={`tool-btn ${index > 3 && !more ? "hidden sm:inline-flex" : ""}`} onClick={() => select(action.id)}>
+            <Icon name={action.icon} size={22} />
+            <span className="tool-label" aria-hidden="true">{action.label}</span>
+          </button>
+        ))}
+        <button type="button" aria-label={more ? "Menos herramientas" : "Más herramientas"} aria-expanded={more} className="tool-btn sm:hidden"
+          onClick={() => setMore((value) => !value)}>
+          <Icon name="menu" size={22} />
+          <span className="tool-label" aria-hidden="true">{more ? "Menos" : "Más"}</span>
+        </button>
       </div>
       {openTool === "measure" && <MeasureTool />}
       {openTool === "location" && <LocationTool />}

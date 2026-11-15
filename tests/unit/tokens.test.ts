@@ -3,8 +3,8 @@ import { COLORS, contrastRatio, FIRE_AGE_RAMP } from "@/lib/tokens";
 
 describe("tokens de diseño", () => {
   it("la paleta de marca cumple contraste AA con texto blanco", () => {
-    expect(contrastRatio("#ffffff", "#014683")).toBeGreaterThan(9);
-    expect(contrastRatio("#ffffff", "#08569a")).toBeGreaterThanOrEqual(7);
+    expect(contrastRatio("#ffffff", COLORS.brand900)).toBeGreaterThan(11);
+    expect(contrastRatio("#ffffff", COLORS.brand700)).toBeGreaterThanOrEqual(9);
     expect(contrastRatio(COLORS.text, COLORS.surface)).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(COLORS.inkMuted, COLORS.brand900)).toBeGreaterThanOrEqual(4.5);
   });

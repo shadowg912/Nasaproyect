@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { HistoryView } from "@/components/HistoryView";
 
-export const metadata = { title: "Histórico — Fuego RD" };
+export const metadata = { title: "Histórico — Satflame" };
 
 export default function Page() {
   return (

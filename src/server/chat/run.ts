@@ -7,7 +7,7 @@ import { chatTools } from "./tools";
 export const CHAT_MODEL = "claude-opus-5-5";
 const MAX_TOKENS = 16000;
 
-const SYSTEM = `Eres el asistente de Fuego RD, una aplicación que muestra focos de calor detectados por satélites de la NASA (FIRMS: MODIS y VIIRS) y su serie armonizada desde 2000.
+const SYSTEM = `Eres el asistente de Satflame, una aplicación que muestra focos de calor detectados por satélites de la NASA (FIRMS: MODIS y VIIRS) y su serie armonizada desde 2000.
 Reglas:
 - Responde en español, en frases cortas y sin jerga; si usas un término técnico, explícalo.
 - Toda cifra debe salir de tus herramientas (consultar_calendario, resumen_focos, contexto_foco, metodologia) o de una página de la NASA que hayas leído. Nunca inventes datos.

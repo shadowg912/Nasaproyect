@@ -36,9 +36,9 @@ export function TopBar() {
     <header className="fixed inset-x-3 top-3 z-50 mx-auto max-w-7xl" aria-label="Cabecera principal">
       <div className="glass flex h-[var(--topbar-h)] items-center justify-between gap-2 px-3 sm:px-4">
         <Link href="/" className="flex min-h-9 items-center gap-2 rounded-md pr-1 font-bold text-white hover:text-[var(--color-ink-muted)]">
-          <span aria-hidden className="brand-mark !grid !h-7 !w-7 place-items-center text-sm">F</span>
-          <span className="hidden sm:inline">Fuego RD</span>
-          <span className="sr-only sm:hidden">Inicio de Fuego RD</span>
+          <span aria-hidden className="brand-mark !grid !h-7 !w-7 place-items-center text-sm">S</span>
+          <span className="hidden sm:inline">Satflame</span>
+          <span className="sr-only sm:hidden">Inicio de Satflame</span>
         </Link>
 
         <NavLinks />

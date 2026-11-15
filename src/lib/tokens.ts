@@ -1,11 +1,11 @@
 /**
- * Tokens de diseño de Fuego RD (spec de rediseño §4). Son la misma fuente para el CSS (`globals.css`), el estilo de
+ * Tokens de diseño de Satflame (spec de rediseño §4). Son la misma fuente para el CSS (`globals.css`), el estilo de
  * MapLibre y el globo three.js de la portada. Sin dependencias de Node: lo importa el cliente.
  */
 export const COLORS = {
-  brand900: "#014683",
-  brand700: "#08569a",
-  brand500: "#1a90d0",
+  brand900: "#01335f",
+  brand700: "#05447a",
+  brand500: "#167fb8",
   brand50: "#e8f3fb",
   ink: "#ffffff",
   inkMuted: "#c9dcef",

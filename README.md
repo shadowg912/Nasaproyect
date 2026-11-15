@@ -1,4 +1,4 @@
-# Fuego RD — Monitoreo de incendios en República Dominicana
+# Satflame — Monitoreo de incendios con datos de la NASA
 
 Aplicación **local-first** que descarga detecciones satelitales de incendios de **NASA FIRMS**, las filtra al territorio
 dominicano y las sirve con su propio mapa, estadísticas e interfaz en español. NASA FIRMS es la **única** fuente externa;

@@ -8,10 +8,10 @@
   --color-fuego-700: #c2410c;
   --color-tierra-900: #1f1a14;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  /* Tokens Fuego RD (spec de rediseño §4) */
-  --color-brand-900: #014683;
-  --color-brand-700: #08569a;
-  --color-brand-500: #1a90d0;
+  /* Tokens Satflame (spec de rediseño §4) */
+  --color-brand-900: #01335f;
+  --color-brand-700: #05447a;
+  --color-brand-500: #167fb8;
   --color-brand-50: #e8f3fb;
   --color-ink: #ffffff;
   --color-ink-muted: #c9dcef;
@@ -97,7 +97,8 @@ summary { min-height: 32px; }
 .text-stone-500 { color: #53616b; }
 
 /* ───────── Rediseño: tokens globales y primitivos (Parte A) ───────── */
-:root { --topbar-h: 56px; --glass: rgb(1 70 131 / 92%); --glass-strong: rgb(1 52 99 / 96%); }
+:root { --topbar-h: 56px; --glass: rgb(1 51 95 / 92%); --glass-strong: rgb(1 38 72 / 96%); }
+@layer components { /* rediseño */
 :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible { outline: 3px solid var(--color-brand-500); outline-offset: 2px; }
 .brand-mark { background: var(--color-brand-700); border-radius: var(--radius-sm); }
 .glass { background: var(--glass); color: var(--color-ink); backdrop-filter: blur(10px); border: 1px solid rgb(255 255 255 / 12%); box-shadow: var(--shadow-float); border-radius: var(--radius-md); }
@@ -118,3 +119,12 @@ summary { min-height: 32px; }
 .ui-panel-header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .6rem .75rem .6rem 1rem; border-bottom: 1px solid rgb(255 255 255 / 12%); font-weight: 700; }
 .ui-panel-body { overflow: auto; padding: .75rem 1rem 1rem; }
 .sr-only-focusable:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Barra de herramientas del mapa: solo iconos; el nombre se despliega al pasar el ratón o enfocar, empujando al resto. */
+.tool-btn { display: inline-flex; align-items: center; height: 44px; min-width: 44px; padding: 0 .7rem; border-radius: 999px; color: var(--color-ink); background: transparent; font-size: .875rem; font-weight: 600; white-space: nowrap; transition: background-color .2s; }
+.tool-btn:hover, .tool-btn:focus-visible { background: var(--color-brand-700); }
+.tool-btn[aria-pressed="true"] { background: var(--color-brand-700); box-shadow: inset 0 0 0 2px var(--color-brand-500); }
+.tool-label { display: inline-block; max-width: 0; margin-left: 0; overflow: hidden; opacity: 0; transition: max-width .28s ease, opacity .2s ease, margin-left .28s ease; }
+.tool-btn:hover .tool-label, .tool-btn:focus-visible .tool-label, .tool-btn[aria-pressed="true"] .tool-label { max-width: 10rem; margin-left: .5rem; opacity: 1; }
+
+}

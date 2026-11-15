@@ -1,4 +1,4 @@
-export const metadata = { title: "Aprende — Fuego RD" };
+export const metadata = { title: "Aprende — Satflame" };
 
 const concepts = [
   ["Foco de calor", "Un píxel que el satélite ve más caliente que su entorno. No equivale necesariamente a un incendio."],

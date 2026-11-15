@@ -1,4 +1,4 @@
-export const metadata = { title: "Créditos y fuentes — Fuego RD" };
+export const metadata = { title: "Créditos y fuentes — Satflame" };
 
 const sources = [
   ["NASA GIBS", "NASA EOSDIS", "Imágenes satelitales, fondos y overlays.", "Uso libre; citar a NASA."],
@@ -18,7 +18,7 @@ export default function CreditsPage() {
       <header className="max-w-3xl">
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-brand-700)]">Transparencia</p>
         <h1 className="text-3xl font-black tracking-tight text-[var(--color-brand-900)]">Créditos y fuentes</h1>
-        <p className="mt-3 leading-relaxed text-[var(--color-text)]">Fuego RD es un proyecto independiente. Los datos e imágenes se atribuyen a sus proveedores; esta aplicación no es un sitio oficial de la NASA.</p>
+        <p className="mt-3 leading-relaxed text-[var(--color-text)]">Satflame es un proyecto independiente. Los datos e imágenes se atribuyen a sus proveedores; esta aplicación no es un sitio oficial de la NASA.</p>
       </header>
       <div className="mt-7 overflow-x-auto rounded-[var(--radius-md)] bg-white shadow-[var(--shadow-float)]">
         <table className="w-full min-w-[48rem] text-left text-sm">

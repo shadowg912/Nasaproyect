@@ -80,5 +80,5 @@ export function exportCsv(db: DB, q: RegionQuery, kind: "detections" | "monthly"
 
 export const exportFilename = (q: RegionQuery, kind: string) => {
   const region = q.aoi ? "area" : q.municipalityId ? `${q.iso3}-m${q.municipalityId}` : q.provinceId ? `${q.iso3}-p${q.provinceId}` : q.iso3;
-  return `fuego-${region}-${kind === "monthly" ? "mensual" : "focos"}-${q.from ?? "inicio"}-${q.to ?? "hoy"}.csv`;
+  return `satflame-${region}-${kind === "monthly" ? "mensual" : "focos"}-${q.from ?? "inicio"}-${q.to ?? "hoy"}.csv`;
 };
