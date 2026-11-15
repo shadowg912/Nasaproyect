@@ -48,7 +48,7 @@ export function getSyncStatus(db: DB, cfg: AppConfig, now = new Date()): SyncSta
     state,
     running,
     hasMapKey: !!cfg.mapKey,
-    hasAiKey: !!process.env.ANTHROPIC_API_KEY,
+    hasAiKey: !!cfg.anthropicKey,
     freshHours: cfg.freshHours,
     lastSuccessAt: lastSuccess?.finishedAt ?? null,
     lastSuccessKind: lastSuccess?.kind ?? null,

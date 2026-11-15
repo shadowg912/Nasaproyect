@@ -22,6 +22,8 @@ export function getConfig() {
     .filter((s): s is FirmsSource => (ALL_SOURCES as readonly string[]).includes(s));
   return {
     mapKey: (env.FIRMS_MAP_KEY ?? "").trim(),
+    /** Clave de Anthropic para el chat IA; vacía = chat desactivado. Nunca llega al cliente. */
+    anthropicKey: (env.ANTHROPIC_API_KEY ?? "").trim(),
     databasePath: path.resolve(/*turbopackIgnore: true*/ env.DATABASE_PATH || "./data/fuego-rd.sqlite"),
     sources: sources.length ? sources : [...NRT_SOURCES],
     dayRange: int(env.FIRMS_DAY_RANGE, 2, 1, 5),
