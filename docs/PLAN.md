@@ -36,3 +36,8 @@ Fuente de requisitos: `docs/PROJECT_SPEC.md`.
 - La regla de la fila 4 se amplía: FIRMS sigue siendo la fuente de focos, y en ejecución se permiten además GIBS (imágenes) y
   POWER (clima) de la NASA, con caché local; la API de Anthropic solo para el chat IA.
 - Telemetría (fila 7): `NEXT_TELEMETRY_DISABLED=1` lo fija ahora `scripts/next.mjs`, portable a Windows.
+
+## Fase 3 — Rediseño visual estilo FIRMS
+
+- Diseño: `docs/superpowers/specs/2026-11-15-rediseno-ui-mapa-design.md`; plan de la Parte A: `docs/superpowers/plans/2026-11-15-parteA-mapa-capas.md`.
+- Se permiten fondos/overlays de terceros con atribución (Esri, UNEP-WCMC, Smithsonian); los datos siguen siendo NASA.

@@ -12,6 +12,11 @@ decisiones y contradicciones resueltas: `docs/PLAN.md`; uso: `README.md`.
   remotas, CDNs, Google Fonts, analítica ni telemetría.
 - Armonización MODIS + VIIRS (reto Space Apps 2026): diseño en `docs/superpowers/specs/2026-11-14-fuego-rd-armonizacion-design.md`,
   motor en `src/server/harmonize/`, historial por país en `src/server/history/`. Contrato de API: `src/lib/types.ts`.
+- **Visualización con terceros (decisión del usuario, 2026-11-15):** fondos y overlays de referencia pueden venir de Esri,
+  UNEP-WCMC (WDPA) y Smithsonian GVP, cargados desde el navegador con atribución visible y sin caché; si fallan, el mapa usa
+  el fondo local. Los **datos** (focos, imágenes, clima) siguen siendo solo NASA. Fuentes documentadas en README y `/creditos`.
+- Rediseño visual: `docs/superpowers/specs/2026-11-15-rediseno-ui-mapa-design.md`; tokens en `src/app/globals.css` y
+  `src/lib/tokens.ts`; primitivos en `src/components/ui/`; contrato del mapa en `src/lib/map/types.ts`.
 - SQLite solo en el servidor. Toda ruta o página que lo toque declara `export const runtime = "nodejs"`. Nunca Edge.
 - Los estilos de mapa no contienen URLs remotas. GeoJSON en `public/geo/`, PMTiles/fuentes/sprites en `public/maps/`.
 - La sincronización nunca borra datos; los errores se registran en `ingestion_runs`. Ausencia de detecciones ≠ fallo.
