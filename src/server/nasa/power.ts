@@ -72,10 +72,12 @@ export async function fetchOpenMeteo(db: DB, lat: number, lon: number, date: str
   return body ? parse(body) : null;
 }
 
-/** Clima del día: NASA POWER primero; si aún no tiene el día, Open-Meteo. Indica la fuente usada. */
+/** Clima del día: consulta NASA POWER y Open-Meteo a la vez; prefiere POWER si tiene el día. Indica la fuente usada. */
 export async function fetchWeather(db: DB, lat: number, lon: number, date: string, fetchImpl: FetchLike = fetch): Promise<SourcedWeather | null> {
-  const nasa = await fetchPower(db, lat, lon, date, fetchImpl).catch(() => null);
+  const [nasa, om] = await Promise.all([
+    fetchPower(db, lat, lon, date, fetchImpl).catch(() => null),
+    fetchOpenMeteo(db, lat, lon, date, fetchImpl).catch(() => null),
+  ]);
   if (nasa) return { ...nasa, source: "NASA POWER" };
-  const om = await fetchOpenMeteo(db, lat, lon, date, fetchImpl).catch(() => null);
   return om ? { ...om, source: "Open-Meteo" } : null;
 }
