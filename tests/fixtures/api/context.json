@@ -1,0 +1,26 @@
+{
+ "imagery": {
+  "url": "/api/imagery?layer=MODIS_Terra_CorrectedReflectance_TrueColor&date=2023-03-15&bbox=18.25,-70.75,18.75,-70.25",
+  "date": "2023-03-15",
+  "layer": "MODIS_Terra_CorrectedReflectance_TrueColor"
+ },
+ "weather": {
+  "windSpeed": 4.2,
+  "windDir": 90,
+  "t2m": 29.1,
+  "rh": 58,
+  "precip": 0
+ },
+ "cause": {
+  "label": "Probable quema agrícola o de limpieza recurrente",
+  "likelihood": "alta",
+  "reasons": [
+   "Esta zona de ~1 km tuvo focos en 6 años distintos en la misma temporada.",
+   "Marzo es el mes con más focos en la serie histórica de RD."
+  ]
+ },
+ "spread": {
+  "bearing": 270,
+  "note": "Estimación según el viento del día (NASA POWER); no es una predicción."
+ }
+}

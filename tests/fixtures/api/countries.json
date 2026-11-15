@@ -1,0 +1,44 @@
+[
+ {
+  "iso3": "DOM",
+  "name": "República Dominicana",
+  "loaded": true,
+  "mode": "full",
+  "progress": 1,
+  "years": {
+   "modis": [
+    2000,
+    2025
+   ],
+   "viirs": [
+    2012,
+    2025
+   ]
+  },
+  "dataUntil": "2026-11-14"
+ },
+ {
+  "iso3": "HTI",
+  "name": "Haití",
+  "loaded": false,
+  "mode": null,
+  "progress": 0,
+  "years": {
+   "modis": null,
+   "viirs": null
+  },
+  "dataUntil": null
+ },
+ {
+  "iso3": "BRA",
+  "name": "Brasil",
+  "loaded": false,
+  "mode": null,
+  "progress": 0,
+  "years": {
+   "modis": null,
+   "viirs": null
+  },
+  "dataUntil": null
+ }
+]
