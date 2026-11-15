@@ -1,0 +1,22 @@
+"use client";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { useApi } from "@/lib/useApi";
+import type { CountryInfo, LoadJob } from "@/lib/types";
+import { Calendar } from "./Calendar";
+const WorldMap=dynamic(()=>import('./WorldMap'),{ssr:false,loading:()=> <p>Cargando mapa local…</p>});
+export function GlobalExplorer(){
+  const [iso3,setIso3]=useState('DOM'),[aoi,setAoi]=useState<string>(),[bbox,setBbox]=useState(['','','','']),[error,setError]=useState(''),[job,setJob]=useState<LoadJob|null>(null),[busy,setBusy]=useState(false),[refresh,setRefresh]=useState(0);
+  const {data:countries,source,error:catalogError}=useApi<CountryInfo[]>('/api/countries',refresh);
+  const country=countries?.find(c=>c.iso3===iso3);
+  function choose(iso:string){if(busy)return;if(!countries?.some(c=>c.iso3===iso)){setError('Este país aún no aparece en el catálogo de la API.');return;}setIso3(iso);setAoi(undefined);setJob(null);setError('');}
+  useEffect(()=>{if(!busy)return;const ctrl=new AbortController();let timer:ReturnType<typeof setTimeout>;const poll=async()=>{try{const r=await fetch(`/api/countries/${iso3}/load`,{signal:ctrl.signal});if(!r.ok)throw new Error('No se pudo consultar la carga.');const j:LoadJob=await r.json();if(ctrl.signal.aborted)return;setJob(j);if(j.state==='done'||j.state==='error'){setBusy(false);setRefresh(v=>v+1);}else timer=setTimeout(poll,1500);}catch(e){if(!ctrl.signal.aborted){setError((e as Error).message);setBusy(false);}}};void poll();return()=>{ctrl.abort();clearTimeout(timer);};},[busy,iso3]);
+  async function load(){setError('');try{const r=await fetch(`/api/countries/${iso3}/load`,{method:'POST'});if(!r.ok)throw new Error('La carga del país no está disponible. Intenta nuevamente cuando la API esté lista.');setBusy(true);}catch(e){setError((e as Error).message);}}
+  return <div className="space-y-4"><div className="page-heading"><p className="eyebrow">Exploración global</p><h1>¿Dónde quieres observar?</h1><p>Selecciona un territorio y compara su actividad a través del tiempo.</p></div>
+    <div className="card flex flex-wrap items-end gap-4"><label>País<select className="input ml-2" value={iso3} disabled={busy} onChange={e=>choose(e.target.value)}>{countries?.map(c=><option value={c.iso3} key={c.iso3}>{c.name}</option>)}</select></label><button className="btn" disabled={busy||country?.loaded||source==='fixture'} onClick={load}>{busy?'Descargando…':country?.loaded?'Historial cargado':'Cargar historial'}</button>{country?.dataUntil&&<p className="text-sm">Datos hasta {country.dataUntil}</p>}{country?.mode==='aggregate'&&<p className="notice">Modo agregado: CSV de focos y detalles limitados a los últimos 12 meses.</p>}{source==='fixture'&&<p className="notice">Catálogo de ejemplo; la carga requiere la API real.</p>}
+    {busy&&<div className="w-full" role="status"><label>Carga del país <progress max={job?.total||1} value={job?.done||0}/></label> {job?.done??0} / {job?.total??'…'} archivos</div>}{(error||job?.error||catalogError)&&<p role="alert">{error||job?.error||catalogError}</p>}</div>
+    <WorldMap onCountry={choose} onArea={area=>{setAoi(area);setBbox(area.split(','));}} aoi={aoi}/>
+    <form className="card flex flex-wrap items-end gap-3" onSubmit={e=>{e.preventDefault();const b=bbox.map(v=>v.trim()===''?NaN:Number(v));if(b.some(v=>!Number.isFinite(v))||b[0]<-180||b[2]>180||b[1]<-90||b[3]>90||b[0]>=b[2]||b[1]>=b[3]){setError('Escribe límites válidos: oeste < este, sur < norte; longitudes entre −180 y 180 y latitudes entre −90 y 90.');return;}setError('');setAoi(b.join(','));}}><fieldset className="flex flex-wrap gap-3"><legend className="mb-2 text-sm font-semibold">Área por coordenadas (grados decimales)</legend>{['Oeste (longitud)','Sur (latitud)','Este (longitud)','Norte (latitud)'].map((label,i)=><label className="text-sm" key={label}>{label}<input required type="number" step="any" className="input block w-32" value={bbox[i]} onChange={e=>setBbox(bbox.map((v,n)=>n===i?e.target.value:v))}/></label>)}</fieldset><button className="btn" type="submit">Aplicar área</button><button className="btn" type="button" onClick={()=>{setAoi(undefined);setBbox(['','','','']);}}>Todo el país</button><p className="w-full text-sm">El área se consulta dentro del país seleccionado: {country?.name??iso3}.</p></form>
+    <Calendar key={iso3+(aoi??'')} region={{iso3,aoi}}/>
+  </div>;
+}
